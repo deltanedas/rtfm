@@ -30,6 +30,7 @@ const setup = run(() => {
 
 	for (var name in rtfm.pages) {
 		rtfm.pages[name].button(pages, name);
+		pages.row();
 	}
 
 	dialog.addCloseButton();
