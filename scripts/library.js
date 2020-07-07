@@ -37,7 +37,7 @@ const rtfm = {
 			}
 
 			page.dialog.show();
-		})).width(300).height(60).marginLeft(16).get();
+		})).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
 	},
 
