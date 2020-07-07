@@ -46,7 +46,7 @@ const addButton = () => {
 
 if (Vars.ui.about) {
 	/* Not loaded on game start, check for old button */
-	if (!Vars.ui.about.cells.find(boolf(cell => cell.name() == "manuals"))) {
+	if (!Vars.ui.about.cells.find(boolf(cell => cell.get().name == "manuals"))) {
 		addButton();
 	}
 } else {
