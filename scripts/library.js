@@ -33,12 +33,11 @@ const rtfm = {
 			if (!page.dialog) {
 				page.dialog = new FloatingDialog(name);
 				page.dialog.addCloseButton();
-//				page.dialog.cont.defaults().left();
 				page.build(page);
 			}
 
 			page.dialog.show();
-		})).width(300).height(60).marginLeft(8).get();
+		})).width(300).height(60).marginLeft(16).get();
 		button.getLabel().setAlignment(Align.left);
 	},
 

@@ -28,7 +28,7 @@ rtfm.addPage("$rtfm.page-title", [
 	"[green]Log.warn(\"RTFM missing, OP Walls' manual will not be available.\");[]\n",
 
 	"Use [green]rtfm.addPage(\"manpage\", [[\"line1\",\"line2\"])[] to add a page.",
-	"It uses a simplified version of markdown, described in the Format section.\n",
+	"It uses a simplified version of markdown, described in the Format section.",
 
 	"## API\n",
 
@@ -48,11 +48,11 @@ rtfm.addPage("$rtfm.page-title", [
 	"    - Checks if [sky]page.dialog[] is set",
 	"    - If not, builds it with [green]page.build(page)[]",
 	"    - Shows it",
-	"    Default for [stat]Page.button[].\n",
+	"    Default for [stat]Page.button[].",
 
 	"# Fields",
 	"[stat]Object<String name, Page page> pages[]",
-	"    Map of names to pages.\n",
+	"    Map of names to pages.",
 
 	"# Types",
 	"[stat]Page[]: {",
@@ -66,13 +66,14 @@ rtfm.addPage("$rtfm.page-title", [
 	"$rtfm.bundle-line",
 	"    [royal]FloatingDialog[] dialog = [coral]null[]",
 	"        Built dialog, shown when the button is clicked.",
-	"}\n",
+	"}",
 
 	"# Format",
-	"Headers start with [coral]#[] and are [stat][[stat][] by default, with an underline.\n",
+	"Headings start with [coral]#[] and are [stat][[stat][] by default, with an underline.",
+	"Unlike markdown, heading size is proportional to number of [coral]#[]es, not inversely.\n",
 
 	"Unformatted text is simply added as labels to the page's table.",
-	"You can use colours as usual with [coral][[][].\n",
+	"You can use colours as usual with [coral][[][].",
 
 	"# Colours",
 	"These colours have special meaning:",

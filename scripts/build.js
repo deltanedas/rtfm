@@ -20,12 +20,12 @@
 (() => {
 
 const addSection = (table, section, size) => {
-	const text = table.add("[stat]" + section).growX().center().get();
+	const text = table.add("[stat]" + section).growX().center().padTop(16).get();
 	text.setAlignment(Align.center);
 	const textwidth = text.prefWidth;
 
-	table.row();
 	/* Underline */
+	table.row();
 	table.addImage().color(Pal.stat).height(2 + 2 * size).width(textwidth).padBottom(16);
 };
 
