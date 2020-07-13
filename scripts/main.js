@@ -19,9 +19,11 @@
 
 const rtfm = require("rtfm/library");
 require("rtfm/docs");
+require("rtfm/button");
 
-const setup = run(() => {
+const setup = () => {
 	const dialog = new FloatingDialog("$rtfm.manual-pages");
+	rtfm.dialog = dialog;
 
 	const pages = new Table();
 	const pane = new ScrollPane(pages);
@@ -34,13 +36,14 @@ const setup = run(() => {
 	}
 
 	dialog.addCloseButton();
-	dialog.show();
-});
+};
+
+Events.on(EventType.ClientLoadEvent, run(setup));
 
 const addButton = () => {
 	// AboutDialog clears after 1 tick, so this waits 2
 	Vars.ui.about.shown(run(() => Time.run(2, run(() => {
-		Vars.ui.about.buttons.addButton("$rtfm.manuals", setup)
+		Vars.ui.about.buttons.addButton("$rtfm.manuals", rtfm.showManual)
 			.size(200, 64).name("manuals");
 	}))));
 };

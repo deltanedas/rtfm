@@ -28,22 +28,8 @@ const rtfm = {
 	buildPage: require("rtfm/build"),
 
 	addButton(table, name) {
-		const page = rtfm.pages[name];
 		const button = table.addButton(name, run(() => {
-			if (!page.dialog) {
-				page.dialog = new FloatingDialog(name);
-				page.dialog.addCloseButton();
-				try {
-					page.build(page);
-				} catch (e) {
-					page.dialog.cont.clear();
-					page.dialog.cont.add("[red]Failed to build page![]");
-					page.dialog.cont.row();
-					page.dialog.cont.add(e + "");
-				}
-			}
-
-			page.dialog.show();
+			rtfm.showPage(name);
 		})).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
 	},
@@ -68,7 +54,36 @@ const rtfm = {
 		rtfm.pages[name] = page;
 	},
 
-	pages: {}
+	pageError(table, error) {
+		// Remove any elements added before the error
+		table.clear();
+
+		table.add("[red]Failed to build page![]");
+		table.row();
+		table.add(error + "");
+	},
+
+	showPage(name) {
+		const page = rtfm.pages[name];
+		if (!page.dialog) {
+			page.dialog = new FloatingDialog(name);
+			page.dialog.addCloseButton();
+			try {
+				page.build(page);
+			} catch (e) {
+				rtfm.pageError(page.dialog.cont, e);
+			}
+		}
+
+		page.dialog.show();
+	},
+
+	showManual() {
+		rtfm.dialog.show();
+	},
+
+	pages: {},
+	dialog: null
 };
 
 module.exports = rtfm;
