@@ -63,7 +63,7 @@ rtfm.addPage("$rtfm.page-title", [
 
 	"    [royal]String[[][] content",
 	"        Raw page lines, not needed for a custom [sky]build[] functions.",
-	"        You can also use Arc elements instead of strings.",
+	"        You can use Arc elements instead of strings.",
 	"$rtfm.bundle-line",
 	"    [royal]FloatingDialog[] dialog = [coral]null[]",
 	"        Built dialog, shown when the button is clicked.",

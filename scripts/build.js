@@ -19,6 +19,8 @@
 
 (() => {
 
+var centered;
+
 const addSection = (table, section, size) => {
 	const text = table.add("[stat]" + section).growX().center().padTop(16).get();
 	text.setAlignment(Align.center);
@@ -37,8 +39,11 @@ const addImage = (table, str) => {
 	const region = Core.atlas.find(name);
 	const size = matched ? matched[2] : region.height;
 
-	table.addImage(region).left().top()
+	const img = table.addImage(region).left().top()
 		.height(size).width(size * (region.width / region.height));
+	if (centered) {
+		img.center();
+	}
 };
 
 module.exports = page => {
@@ -53,6 +58,14 @@ module.exports = page => {
 		var line = page.content[i];
 		table.row();
 
+		centered = false;
+		var textfunc = cell => {
+			cell.get().wrap = true;
+			if (centered) {
+				cell.get().alignment = Align.center;
+			}
+		};
+
 		/* Custom elements */
 		if (typeof(line) != "string") {
 			table.add(line);
@@ -66,6 +79,13 @@ module.exports = page => {
 			continue;
 		}
 
+		/* Center non-headings */
+		var center = line.match(/^~([^]+)/);
+		if (center) {
+			line = center[1];
+			centered = true;
+		}
+
 		/* Check for images */
 		while (true) {
 			var image = line.match(/^([^]+?)?\{([\w-]+(?::\d+)?)\}([^]*)$/)
@@ -73,7 +93,7 @@ module.exports = page => {
 
 			var before = image[1], img = image[2], after = image[3];
 			if (before) {
-				table.add(before).get().setWrap(true);
+				textfunc(table.add(before));
 			}
 
 			addImage(table, img);
@@ -81,7 +101,7 @@ module.exports = page => {
 		}
 
 		if (line) {
-			table.add(line).get().setWrap(true);
+			textfunc(table.add(line));
 		}
 	}
 };
