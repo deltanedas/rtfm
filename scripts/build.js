@@ -26,12 +26,25 @@ const addSection = (table, section, size) => {
 
 	/* Underline */
 	table.row();
-	table.addImage().color(Pal.stat).height(2 + 2 * size).width(textwidth).padBottom(16);
+	table.addImage().color(Pal.stat).height(2 + 2 * size)
+		.width(textwidth).center().padBottom(16);
+};
+
+/* Add image in the format {texture[:size]} */
+const addImage = (table, str) => {
+	const matched = str.match(/^([\w-]+)\s*:\s*(\d+)$/);
+	const name = matched ? matched[1] : str;
+	const region = Core.atlas.find(name);
+	const size = matched ? matched[2] : region.height;
+
+	table.addImage(region).left().top()
+		.height(size).width(size * (region.width / region.height));
 };
 
 module.exports = page => {
 	const table = new Table();
 	table.left().margin(32);
+	table.defaults().left();
 	const pane = new ScrollPane(table);
 	page.dialog.cont.add(pane).grow();
 	Core.app.post(run(() => Core.scene.setScrollFocus(pane)));
@@ -40,14 +53,35 @@ module.exports = page => {
 		var line = page.content[i];
 		table.row();
 
-		var section = line.match(/^(#+)\s*(.+)/);
+		/* Custom elements */
+		if (typeof(line) != "string") {
+			table.add(line);
+			continue;
+		}
+
+		// [^] = lua and maybe c regex ".", match ALL characters, even evil newlines.
+		var section = line.match(/^(#+)\s*([^]+)/);
 		if (section) {
 			addSection(table, section[2], section[1].length);
 			continue;
 		}
 
-		if (line.length > 0) {
-			table.add(line).left().get().setWrap(true);
+		/* Check for images */
+		while (true) {
+			var image = line.match(/^([^]+?)?\{([\w-]+(?::\d+)?)\}([^]*)$/)
+			if (!image) break;
+
+			var before = image[1], img = image[2], after = image[3];
+			if (before) {
+				table.add(before).get().setWrap(true);
+			}
+
+			addImage(table, img);
+			line = after;
+		}
+
+		if (line) {
+			table.add(line).get().setWrap(true);
 		}
 	}
 };

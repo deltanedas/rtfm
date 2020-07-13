@@ -33,7 +33,14 @@ const rtfm = {
 			if (!page.dialog) {
 				page.dialog = new FloatingDialog(name);
 				page.dialog.addCloseButton();
-				page.build(page);
+				try {
+					page.build(page);
+				} catch (e) {
+					page.dialog.cont.clear();
+					page.dialog.cont.add("[red]Failed to build page![]");
+					page.dialog.cont.row();
+					page.dialog.cont.add(e + "");
+				}
 			}
 
 			page.dialog.show();

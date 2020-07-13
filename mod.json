@@ -3,7 +3,7 @@
 	"displayName": "[red]R[yellow]T[green]F[blue]M",
 	"author": "DeltaNedas",
 	"description": "Mod that adds a manual page library. RTFM in the Info menu.",
-	"version": "1.0.3",
+	"version": "1.1.0",
 	"dependencies": ["ui-lib"],
 	"hidden": true
 }

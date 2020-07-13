@@ -63,6 +63,7 @@ rtfm.addPage("$rtfm.page-title", [
 
 	"    [royal]String[[][] content",
 	"        Raw page lines, not needed for a custom [sky]build[] functions.",
+	"        You can also use Arc elements instead of strings.",
 	"$rtfm.bundle-line",
 	"    [royal]FloatingDialog[] dialog = [coral]null[]",
 	"        Built dialog, shown when the button is clicked.",
@@ -72,7 +73,13 @@ rtfm.addPage("$rtfm.page-title", [
 	"Headings start with [coral]#[] and are [stat][[stat][] by default, with an underline.",
 	"Unlike markdown, heading size is proportional to number of [coral]#[]es, not inversely.\n",
 
-	"Unformatted text is simply added as labels to the page's table.",
+	"You can add images with [coral]{texture[[:size]}[].",
+	"The size is the image's height by default, width is scaled with it.",
+	"Prefix your mod's textures with modname-, as always.",
+	"Example:",
+	"{rtfm-image-example}",
+
+	"\nUnformatted text is simply added as labels to the page's table.",
 	"You can use colours as usual with [coral][[][].",
 
 	"# Colours",
