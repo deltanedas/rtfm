@@ -62,6 +62,7 @@ module.exports = page => {
 		var textfunc = cell => {
 			cell.get().wrap = true;
 			if (centered) {
+				cell.center();
 				cell.get().alignment = Align.center;
 			}
 		};
