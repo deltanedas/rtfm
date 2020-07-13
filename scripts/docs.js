@@ -48,15 +48,25 @@ rtfm.addPage("$rtfm.page-title", [
 	"    - Checks if [sky]page.dialog[] is set",
 	"    - If not, builds it with [green]page.build(page)[]",
 	"    - Shows it",
-	"    Default for [stat]Page.button[].",
+	"    Default for [stat]Page.button[].\n",
+
+	"[stat]showPage(String name)[]",
+	"    Show a manual page's dialog.",
+	"    Called by [stat]rtfm.addButton[].\n",
+
+	"[stat]showManual()[]",
+	"    Show [stat]rtfm.dialog[].",
 
 	"# Fields",
 	"[stat]Object<String name, Page page> pages[]",
-	"    Map of names to pages.",
+	"    Map of names to pages.\n",
+
+	"[stat]FloatingDialog dialog[]",
+	"    The manual page list dialog.",
 
 	"# Types",
 	"[stat]Page[]: {",
-	"    [royal]function(Page page)[] build = [sky]rtfm.buildPage[]",
+	"    [royal]function(Page page)[] build = [stat]rtfm.buildPage[]",
 	"        Function that fills [sky]page.dialog.cont[].",
 	"    [royal]function(Table parent, String name)[] button = [stat]rtfm.addButton[]",
 	"        Funcion that adds the page's opening button.\n",
@@ -72,6 +82,8 @@ rtfm.addPage("$rtfm.page-title", [
 	"# Format",
 	"Headings start with [coral]#[] and are [stat][[stat][] by default, with an underline.",
 	"Unlike markdown, heading size is proportional to number of [coral]#[]es, not inversely.\n",
+
+	"Lines can be centered with a [coral]~[] at the start.\n",
 
 	"You can add images with [coral]{texture[[:size]}[].",
 	"The size is the image's height by default, width is scaled with it.",
