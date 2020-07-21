@@ -4,6 +4,5 @@
 	"author": "DeltaNedas",
 	"description": "Mod that adds a manual page library. RTFM in the Info menu.",
 	"version": "1.2.1",
-	"dependencies": ["ui-lib"],
 	"hidden": true
 }
