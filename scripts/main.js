@@ -23,17 +23,36 @@ require("rtfm/button");
 
 const setup = () => {
 	const dialog = new FloatingDialog("$rtfm.manual-pages");
+	const cont = dialog.cont;
 	rtfm.dialog = dialog;
 
-	const pages = new Table();
-	const pane = new ScrollPane(pages);
-	dialog.cont.add(pane);
-	Core.app.post(run(() => Core.scene.setScrollFocus(pane)));
+	var rebuild;
 
-	for (var name in rtfm.pages) {
-		rtfm.pages[name].button(pages, name);
-		pages.row();
-	}
+	cont.table(cons(search => {
+		search.left();
+		search.addImage(Icon.zoom);
+		search.addField("", cons(text => {
+			rebuild(text.toLowerCase());
+		})).growX();
+	})).fillX().padBottom(4);
+	cont.row();
+
+	cont.pane(cons(pages => {
+		pages.top().margin(20);
+		rebuild = query => {
+			pages.clear();
+			for (var name in rtfm.pages) {
+				if (query && !name.toLowerCase().includes(query)) {
+					continue;
+				}
+
+				rtfm.pages[name].button(pages, name);
+				pages.row();
+			}
+		};
+	}));
+
+	rebuild();
 
 	dialog.addCloseButton();
 };
