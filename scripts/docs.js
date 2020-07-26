@@ -89,7 +89,7 @@ rtfm.addSection("$rtfm.docs.title", {
 		"    [royal]String[[][] content",
 		"        Raw page lines, not needed for a custom [sky]build[] function.",
 		"        You can use Arc elements instead of strings.",
-		"$rtfm.bundle-line",
+		"$rtfm.docs.bundle-line",
 		"    [royal]Table[] table = [coral]null",
 		"        Built table, shown when the button is clicked.",
 		"    [royal]Page[] section = [coral]rtfm",
