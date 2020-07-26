@@ -25,7 +25,7 @@ try {
 
 	ui.addButton("manuals", "bookOpen", rtfm.showManual);
 } catch (e) {
-	// ui-lib not installed
+	// ui-lib not installed, oh no
 }
 
 })();

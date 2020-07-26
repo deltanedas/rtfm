@@ -21,84 +21,109 @@
 
 const rtfm = require("rtfm/library");
 
-rtfm.addPage("$rtfm.page-title", [
-	"## Getting Started",
-	"Add [green]const rtfm = require(\"rtfm/library\")[] [stat]in a try/catch block[].",
-	"Try to not break everything if RTFM isn't installed, instead perhaps print a warning to the log:",
-	"[green]Log.warn(\"RTFM missing, OP Walls' manual will not be available.\");[]\n",
+rtfm.addSection("$rtfm.docs.title", {
+	"$rtfm.docs.getting-started": [
+		"# Setup",
+		"Add [green]const rtfm = require(\"rtfm/library\")[] [stat]in a try/catch block[].",
+		"Try to not break everything if RTFM isn't installed, instead perhaps print a warning to the log:",
+		"[green]Log.warn(\"RTFM missing, OP Walls' manual will not be available.\");[]\n",
 
-	"Use [green]rtfm.addPage(\"manpage\", [[\"line1\",\"line2\"])[] to add a page.",
-	"It uses a simplified version of markdown, described in the Format section.",
+		"# Adding pages",
+		"Use [green]rtfm.addPage(\"manpage\", [[\"line1\",\"line2\"])[] to add a page.",
+		"Manual pages use a format documented in the [red]Format[] page.",
 
-	"## API\n",
+		"# Sections",
+		"Sections are like pages but instead of containing a page's content, they show other pages.",
+		"Use [green]rtfm.addSection(\"OP Walls\", {\"Router Wall\": []})[] to add a page.",
+		"Sub-sections can be added with the third [sky]parent[] parameter of [stat]addSection[]."
+	],
 
-	"# Functions",
-	"[stat]addPage(String name, Page page)[]",
-	"    Add a page to [stat]rtfm.pages[].",
-	"    [sky]page[] may be a [stat]Page[] or the page's content, for simplicity.",
-	"    See [stat]Page[] definition.\n",
+	"$rtfm.docs.library": [
+		"# Functions",
+		"[stat]addPage(String name, Page page)",
+		"    Add a page to [stat]rtfm.pages[].",
+		"    [sky]page[] may be a [stat]Page[] or the page's content, for simplicity.",
+		"    See [stat]Page[] definition.\n",
 
-	"[stat]buildPage(Page page)[]",
-	"    Parses the manual page lines in [sky]page.content[] and adds the results to [sky]page.dialog[].",
-	"    Default function for [stat]Page.build[stat].",
-	"    See the [coral]Format[] section for more info.\n",
+		"[stat]buildPage(Page page)",
+		"    Parses the manual page lines in [sky]page.content[] and adds the results to [sky]page.title[].",
+		"    Default function for [stat]Page.build[stat].",
+		"    See the [red]Format[] page for more info.\n",
 
-	"[stat]addButton(Table parent, String name)[]",
-	"    Adds a button to the table that when clicked:",
-	"    - Checks if [sky]page.dialog[] is set",
-	"    - If not, builds it with [green]page.build(page)[]",
-	"    - Shows it",
-	"    Default for [stat]Page.button[].\n",
+		"[stat]addButton(Table parent, Page page)",
+		"    Adds a button to the table that when clicked runs [stat]rtfm.showPage[].",
+		"    Default for [stat]Page.button[].\n",
 
-	"[stat]showPage(String name)[]",
-	"    Show a manual page's dialog.",
-	"    Called by [stat]rtfm.addButton[].\n",
+		"[stat]getTitle(Page page)",
+		"    Returns the full \"path\" of a page.",
+		"    If it is not in a section, the name is returned.",
+		"    If it is, the section's title and the page's name is returned.",
+		"    Default for [stat]Page.title[].\n",
 
-	"[stat]showManual()[]",
-	"    Show [stat]rtfm.dialog[].",
+		"[stat]showPage(Page name)",
+		"    Show a manual page.",
+		"    Name may be a String, for [stat]rtfm.pages[].",
+		"    Called by [stat]rtfm.addButton[].\n",
 
-	"# Fields",
-	"[stat]Object<String name, Page page> pages[]",
-	"    Map of names to pages.\n",
+		"[stat]showManual()",
+		"    Show [stat]rtfm.dialog[], with the current page.",
 
-	"[stat]FloatingDialog dialog[]",
-	"    The manual page list dialog.",
+		"# Fields",
+		"[stat]Page currentPage[] = [coral]null",
+		"    The page or section currently being viewed.\n",
 
-	"# Types",
-	"[stat]Page[]: {",
-	"    [royal]function(Page page)[] build = [stat]rtfm.buildPage[]",
-	"        Function that fills [sky]page.dialog.cont[].",
-	"    [royal]function(Table parent, String name)[] button = [stat]rtfm.addButton[]",
-	"        Funcion that adds the page's opening button.\n",
+		"[stat]Object<String name, Page page> pages",
+		"    Map of names to root pages.\n",
 
-	"    [royal]String[[][] content",
-	"        Raw page lines, not needed for a custom [sky]build[] functions.",
-	"        You can use Arc elements instead of strings.",
-	"$rtfm.bundle-line",
-	"    [royal]FloatingDialog[] dialog = [coral]null[]",
-	"        Built dialog, shown when the button is clicked.",
-	"}",
+		"[stat]ManualDialog dialog[] extends [royal]FloatingDialog",
+		"    The manual page dialog.",
+		"    Has a function [stat]view(Page page)[] which adjusts the dialog for the page or section.",
 
-	"# Format",
-	"Headings start with [coral]#[] and are [stat][[stat][] by default, with an underline.",
-	"Unlike markdown, heading size is proportional to number of [coral]#[]es, not inversely.\n",
+		"# [stat]Page[] definition",
+		"    [royal]function(Page page)[] build = [coral]rtfm.buildPage",
+		"        Function that fills [sky]page.table[].",
+		"    [royal]function(Table parent, Page page)[] button = [stat]rtfm.addButton",
+		"        Function that adds the page's opening button.",
+		"    [royal]function(Page page)[] title = [stat]rtfm.getTitle",
+		"        Returns the title shown at the top of the manual page.\n",
 
-	"Lines can be centered with a [coral]~[] at the start.\n",
+		"    [royal]String[[][] content",
+		"        Raw page lines, not needed for a custom [sky]build[] function.",
+		"        You can use Arc elements instead of strings.",
+		"$rtfm.bundle-line",
+		"    [royal]Table[] table = [coral]null",
+		"        Built table, shown when the button is clicked.",
+		"    [royal]Page[] section = [coral]rtfm",
+		"        Parent section of this page, or [stat]rtfm[] if a root page.",
+		"    [stat]Object<String name, Page page> pages = [coral]undefined",
+		"        Map of names to child pages, undefined for normal pages."
+	],
 
-	"You can add images with [coral]{texture[[:size]}[].",
-	"The size is the image's height by default, width is scaled with it.",
-	"Prefix your mod's textures with modname-, as always.",
-	"Example:",
-	"{rtfm-image-example}",
+	"$rtfm.docs.format": [
+		"Headings start with [coral]#[] and are [stat][[stat][] by default, with an underline.",
+		"Unlike markdown, heading size is proportional to number of [coral]#[]es, not inversely.\n",
 
-	"\nUnformatted text is simply added as labels to the page's table.",
-	"You can use colours as usual with [coral][[][].",
+		"~Lines can be centered with a [coral]tilde (~)[] at the start.\n",
 
-	"# Colours",
-	"These colours have special meaning:",
-	"- [sky][[sky][]: Function argument/variable",
-	"- [stat][[stat][]: RTFM function/field/type",
-	"- [green][[green][]: Code"
-]);
+		"You can add images with [coral]{texture[[:size]}[].",
+		"The size is the image's height by default, width is scaled with it.",
+		"Prefix your mod's textures with modname-, as always.",
+		"Example:",
+		"{rtfm-image-example}",
+
+		"\nUnformatted text is simply added as labels to the page's table.",
+		"You can use colours as usual with [coral][[][].",
+	],
+
+	"$rtfm.docs.colours": [
+		"These colours in the docs have special meaning:",
+		"- [sky][[sky][]: Function argument/variable",
+		"- [stat][[stat][]: RTFM function/field/type",
+		"- [coral][[coral][]: Default field/parameter",
+		"- [green][[green][]: Code",
+		// TODO: add links
+		"- [red][[red][]: Reference to another section"
+	]
+});
 
 })();

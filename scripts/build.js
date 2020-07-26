@@ -47,12 +47,9 @@ const addImage = (table, str) => {
 };
 
 module.exports = page => {
-	const table = new Table();
-	table.left().margin(32);
+	const table = page.table;
 	table.defaults().left();
-	const pane = new ScrollPane(table);
-	page.dialog.cont.add(pane).grow();
-	Core.app.post(run(() => Core.scene.setScrollFocus(pane)));
+	table.row();
 
 	for (var i in page.content) {
 		var line = page.content[i];

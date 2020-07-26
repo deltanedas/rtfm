@@ -19,22 +19,39 @@
 
 (() => {
 
-/* Only load once when required many times */
+/* Only load once when required multiple times */
 if (this.global.rtfm) {
 	module.exports = this.global.rtfm;
-} else {
+	return;
+}
 
 const rtfm = {
 	buildPage: require("rtfm/build"),
 
-	addButton(table, name) {
-		const button = table.addButton(name, run(() => {
-			rtfm.showPage(name);
+	addButton(table, page) {
+		const title = (page.pages ? "[stat]" : "") + page.name;
+		const button = table.addButton(title, run(() => {
+			rtfm.dialog.view(page);
 		})).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
 	},
 
-	addPage(name, page) {
+	getTitle(page) {
+		return page.section == rtfm
+			// Bare name for root pages
+			? page.name
+			// Page "path" for section pages
+			: page.section.title(page.section) + " / " + page.name;
+	},
+
+	addPage(name, page, section) {
+		if (name[0] == '$') {
+			name = Core.bundle.get(name.substr(1));
+		}
+
+		/* Default section is the manual index */
+		section = section || rtfm;
+
 		/* Alt-arg of just the content */
 		if (Array.isArray(page)) {
 			page = {content: page};
@@ -49,9 +66,28 @@ const rtfm = {
 			page.build = rtfm.buildPage;
 		}
 
-		page.dialog = null;
+		if (!page.title) {
+			page.title = rtfm.getTitle;
+		}
 
-		rtfm.pages[name] = page;
+		page.table = null;
+		page.name = name;
+		page.section = section;
+
+		section.pages[name] = page;
+		return page;
+	},
+
+	addSection(name, pages, parent) {
+		const section = rtfm.addPage(name, {
+			pages: {}
+		}, parent);
+
+		for (var pname in pages) {
+			rtfm.addPage(pname, pages[pname], section);
+		}
+
+		return section;
 	},
 
 	pageError(table, error) {
@@ -60,22 +96,16 @@ const rtfm = {
 
 		table.add("[red]Failed to build page![]");
 		table.row();
-		table.add(error + "");
+		table.add(error + "").get().wrap = true;
 	},
 
-	showPage(name) {
-		const page = rtfm.pages[name];
-		if (!page.dialog) {
-			page.dialog = new FloatingDialog(name);
-			page.dialog.addCloseButton();
-			try {
-				page.build(page);
-			} catch (e) {
-				rtfm.pageError(page.dialog.cont, e);
-			}
+	showPage(page) {
+		if (typeof(page) == "string") {
+			page = rtfm.pages[page];
 		}
 
-		page.dialog.show();
+		rtfm.dialog.view(page);
+		rtfm.dialog.show();
 	},
 
 	showManual() {
@@ -83,11 +113,11 @@ const rtfm = {
 	},
 
 	pages: {},
+	currentPage: null,
 	dialog: null
 };
 
 module.exports = rtfm;
 this.global.rtfm = rtfm;
 
-}
 })();

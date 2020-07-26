@@ -22,39 +22,101 @@ require("rtfm/docs");
 require("rtfm/button");
 
 const setup = () => {
-	const dialog = new FloatingDialog("$rtfm.manual-pages");
-	const cont = dialog.cont;
-	rtfm.dialog = dialog;
+	const dialog = extendContent(FloatingDialog, "$rtfm.manual-pages", {
+		view(page) {
+			rtfm.currentPage = page;
 
-	var rebuild;
+			this.buttons.clearChildren();
 
-	cont.table(cons(search => {
-		search.left();
-		search.addImage(Icon.zoom);
-		search.addField("", cons(text => {
-			rebuild(text.toLowerCase());
-		})).growX();
-	})).fillX().padBottom(4);
-	cont.row();
-
-	cont.pane(cons(pages => {
-		pages.top().margin(20);
-		rebuild = query => {
-			pages.clear();
-			for (var name in rtfm.pages) {
-				if (query && !name.toLowerCase().includes(query)) {
-					continue;
-				}
-
-				rtfm.pages[name].button(pages, name);
-				pages.row();
+			if (page == rtfm) {
+				this.title.text = Core.bundle.get("rtfm.manual-pages");
+				this.addCloseButton();
+			} else {
+				this.title.text = page.title(page);
+				this.buttons.addImageTextButton("$back", Icon.left, run(() => {
+					this.view(page.section);
+				}));
 			}
-		};
-	}));
 
-	rebuild();
+			this.cont.clear();
+			if (page.pages) {
+				this.rebuildSection(page);
+			} else {
+				this.rebuild(page);
+			}
+		},
 
-	dialog.addCloseButton();
+		/* Show a search bar and the page list */
+		rebuildSection(section) {
+			const t = this.cont;
+			var rebuild;
+
+			t.table(cons(search => {
+				search.left();
+				search.addImage(Icon.zoom);
+				search.addField("", cons(text => {
+					rebuild(text.toLowerCase());
+				})).growX();
+			})).fillX().padBottom(4);
+			t.row();
+
+			t.pane(cons(pages => {
+				rebuild = query => {
+try{
+					pages.clear();
+
+					/* ls --group-directories-first */
+					const pagenames = [];
+					const sectionnames = Object.keys(section.pages).filter(name => {
+						if (section.pages[name].pages) {
+							return true;
+						}
+						pagenames.push(name);
+					});
+
+					const func = names => {
+						for (var i in names) {
+							var name = names[i];
+							if (query && !name.toLowerCase().includes(query)) {
+								continue;
+							}
+
+							var page = section.pages[name]
+							page.button(pages, page);
+							pages.row();
+						}
+					};
+
+					func(sectionnames.sort());
+					func(pagenames.sort());
+}catch(e){print(e)}
+				};
+				rebuild();
+			})).top().margin(20).padBottom(8);
+		},
+
+		/* Show the manual page */
+		rebuild(page) {
+try{
+print("rebuild page " + page.title(page))
+			if (!page.table) {
+				page.table = new Table();
+				try {
+					page.build(page);
+				} catch (e) {
+					rtfm.pageError(page.table, e);
+				}
+			}
+
+			const pane = new ScrollPane(page.table);
+			this.cont.add(pane).grow();
+			Core.app.post(run(() => Core.scene.setScrollFocus(pane)));
+}catch(e){print(e)}
+		}
+	});
+
+	rtfm.dialog = dialog;
+	dialog.view(rtfm);
 };
 
 Events.on(EventType.ClientLoadEvent, run(setup));
