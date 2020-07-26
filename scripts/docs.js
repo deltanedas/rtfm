@@ -24,12 +24,11 @@ const rtfm = require("rtfm/library");
 rtfm.addSection("$rtfm.docs.title", {
 	"$rtfm.docs.getting-started": [
 		"# Setup",
-		"Add [green]const rtfm = require(\"rtfm/library\")[] [stat]in a try/catch block[].",
-		"Try to not break everything if RTFM isn't installed, instead perhaps print a warning to the log:",
-		"[green]Log.warn(\"RTFM missing, OP Walls' manual will not be available.\");[]\n",
+		"Get [coral]sample.js[] from your RTFM zip/folder or from GitHub at https://github.com/DeltaNedas/rtfm/raw/master/sample.js",
+		"Modify it to suit your needs, read the comments",
 
 		"# Adding pages",
-		"Use [green]rtfm.addPage(\"manpage\", [[\"line1\",\"line2\"])[] to add a page.",
+		"Use [green]rtfm.addPage(\"cool manpage\", [[\"line1\",\"line2\"])[] to add a page.",
 		"Manual pages use a format documented in the [red]Format[] page.",
 
 		"# Sections",

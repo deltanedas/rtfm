@@ -11,3 +11,4 @@ Read the "RTFM Manual" page.
 # License
 
 Licensed under the GNU GPL v3, see [COPYING](COPYING)
+The [sample script](/sample.js) is in the public domain.
