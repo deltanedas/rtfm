@@ -33,7 +33,7 @@ rtfm.addSection("$rtfm.docs.title", {
 
 		"# Sections",
 		"Sections are like pages but instead of containing a page's content, they show other pages.",
-		"Use [green]rtfm.addSection(\"OP Walls\", {\"Router Wall\": []})[] to add a page.",
+		"Use [green]rtfm.addSection(\"OP Walls\", {\"Router Wall\": []})[] to add a section.",
 		"Sub-sections can be added with the third [sky]parent[] parameter of [stat]addSection[]."
 	],
 
