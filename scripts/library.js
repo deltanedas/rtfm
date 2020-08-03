@@ -15,10 +15,6 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* rtfm for the manual, frontend in library.js */
-
-(() => {
-
 /* Only load once when required multiple times */
 if (this.global.rtfm) {
 	module.exports = this.global.rtfm;
@@ -30,9 +26,9 @@ const rtfm = {
 
 	addButton(table, page) {
 		const title = (page.pages ? "[stat]" : "") + page.name;
-		const button = table.addButton(title, run(() => {
+		const button = table.addButton(title, () => {
 			rtfm.dialog.view(page);
-		})).width(300).height(60).marginLeft(16).padBottom(8).get();
+		}).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
 	},
 
@@ -49,10 +45,17 @@ const rtfm = {
 			name = Core.bundle.get(name.substr(1));
 		}
 
-		/* Default section is the manual index */
+		// Default section is the manual index
 		section = section || rtfm;
+		var path = section.path + "/" + name;
 
-		/* Alt-arg of just the content */
+		/* addPage(String) */
+		if (page == null) {
+			page = readString(path)
+				.split("\n").replace(/\t/g, "    ");
+		}
+
+		/* addPage(String, String[]) */
 		if (Array.isArray(page)) {
 			page = {content: page};
 		}
@@ -73,9 +76,16 @@ const rtfm = {
 		page.table = null;
 		page.name = name;
 		page.section = section;
+		page.path = path;
 
 		section.pages[name] = page;
 		return page;
+	},
+
+	addPages(pages, section) {
+		for (var i in pages) {
+			rtfm.addPage(paged[i], null, section);
+		}
 	},
 
 	addSection(name, pages, parent) {
@@ -84,7 +94,17 @@ const rtfm = {
 		}, parent);
 
 		for (var pname in pages) {
-			rtfm.addPage(pname, pages[pname], section);
+			var child = pages[pname];
+			if (child == null) {
+				// Read from file
+				rtfm.addPage(pname, null, section);
+			} else if (Array.isArray(child)) {
+				// Inline page
+				rtfm.addPage(pname, child, section);
+			} else {
+				// Subsection
+				rtfm.addSection(pname, child, section);
+			}
 		}
 
 		return section;
@@ -101,6 +121,13 @@ const rtfm = {
 
 	showPage(page) {
 		if (typeof(page) == "string") {
+			var section = rtfm.pages;
+			while (true) {
+				var matched = page.match(/^([^/]+)\s*\/\s*(\S+)/);
+				if (!matched) break;
+				section = section.pages[matched[1]];
+				page = matched[2];
+			}
 			page = rtfm.pages[page];
 		}
 
@@ -113,11 +140,10 @@ const rtfm = {
 	},
 
 	pages: {},
+	path = "manuals";
 	currentPage: null,
 	dialog: null
 };
 
 module.exports = rtfm;
 this.global.rtfm = rtfm;
-
-})();

@@ -17,8 +17,6 @@
 
 /* Build a page's dialog from page.content, a small subset of markdown */
 
-(() => {
-
 var centered;
 
 const addSection = (table, section, size) => {
@@ -103,5 +101,3 @@ module.exports = page => {
 		}
 	}
 };
-
-})();

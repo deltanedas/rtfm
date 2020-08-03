@@ -15,17 +15,15 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* Add an in-map button with DeltaNedas/ui-lib */
-
-(() => {
+/* Add buttons with DeltaNedas/ui-lib */
 
 try {
 	const ui = require("ui-lib/library");
 	const rtfm = require("rtfm/library");
 
 	ui.addButton("manuals", "bookOpen", rtfm.showManual);
+	ui.addMenuButton("manuals", "bookOpen", rtfm.showManual);
 } catch (e) {
 	// ui-lib not installed, oh no
+	Log.warn("Install [#00aaff]DeltaNedas/ui-lib[] for extra manual buttons.");
 }
-
-})();

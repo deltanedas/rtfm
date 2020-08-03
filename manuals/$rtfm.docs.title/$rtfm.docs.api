@@ -1,0 +1,59 @@
+# Functions
+[stat]addPage(String name, Page page)
+	Add a page to [stat]rtfm.pages[].
+	[sky]page[] may be a [stat]Page[] or the page's content as an array of lines, for simplicity.
+	If page isn't set, the content is read from [green]manuals/<name>[].
+	See [stat]Page[] definition.
+
+[stat]buildPage(Page page)
+	Parses the manual page lines in [sky]page.content[] and adds the results to [sky]page.title[].
+	Default function for [stat]Page.build[stat].
+	See the [red]Format[] page for more info.
+
+[stat]addButton(Table parent, Page page)
+	Adds a button to the table that when clicked runs [stat]rtfm.showPage[].
+	Default for [stat]Page.button[].
+
+[stat]getTitle(Page page)
+	Returns the full "path" of a page.
+	If it is not in a section, the name is returned.
+	If it is, the section's title and the page's name is returned.
+	Default for [stat]Page.title[].
+
+[stat]showPage(Page name)
+	Show a manual page.
+	Name may be a String, for [stat]rtfm.pages[].
+	Called by [stat]rtfm.addButton[].
+
+[stat]showManual()
+	Show [stat]rtfm.dialog[], with the current page.
+
+# Fields
+[stat]Page currentPage[] = [coral]null
+	The page or section currently being viewed.
+
+[stat]Object<String name, Page page> pages
+	Map of names to root pages.
+
+[stat]ManualDialog dialog[] extends [royal]FloatingDialog
+	The manual page dialog.
+	Has a function [stat]view(Page page)[] which adjusts the dialog for the page or section.
+
+# [stat]Page[] definition
+	[royal]function(Page page)[] build = [coral]rtfm.buildPage
+		Function that fills [sky]page.table[].
+	[royal]function(Table parent, Page page)[] button = [stat]rtfm.addButton
+		Function that adds the page's opening button.
+	[royal]function(Page page)[] title = [stat]rtfm.getTitle
+		Returns the title shown at the top of the manual page.
+
+	[royal]String[[][] content
+		Raw page lines, not needed for a custom [sky]build[] function.
+		You can use Arc elements instead of strings.
+$rtfm.docs.bundle-line
+	[royal]Table[] table = [coral]null
+		Built table, shown when the button is clicked.
+	[royal]Page[] section = [coral]rtfm
+		Parent section of this page, or [stat]rtfm[] if a root page.
+	[stat]Object<String name, Page page> pages = [coral]undefined
+		Map of names to child pages, undefined for normal pages.
