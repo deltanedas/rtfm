@@ -22,7 +22,7 @@ try {
 	const rtfm = require("rtfm/library");
 
 	ui.addButton("manuals", "bookOpen", rtfm.showManual);
-	ui.addMenuButton("manuals", "bookOpen", rtfm.showManual);
+	ui.addMenuButton("$rtfm.manuals", "bookOpen", rtfm.showManual);
 } catch (e) {
 	// ui-lib not installed, oh no
 	Log.warn("Install [#00aaff]DeltaNedas/ui-lib[] for extra manual buttons.");
