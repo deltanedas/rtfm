@@ -35,7 +35,7 @@
 [stat]Object<String name, Page page> pages
 	Map of names to root pages.
 
-[stat]ManualDialog dialog[] extends [royal]FloatingDialog
+[stat]ManualDialog dialog[] extends [royal]BaseDialog
 	The manual page dialog.
 	Has a function [stat]view(Page page)[] which adjusts the dialog for the page or section.
 

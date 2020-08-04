@@ -17,27 +17,57 @@
 
 /* Build a page's dialog from page.content, a small subset of markdown */
 
+const Pattern = java.util.regex.Pattern;
+
 var centered;
+
+/* Precompiled regular expressions */
+
+// /^(#+)\s*([^]+)/
+const getSection = line => {
+	var depth = 0, spaces = 0;
+
+	for (var i in line) {
+		var c = line[i];
+		if (c == ' ') {
+			spaces++;
+		} else if (c == '#') {
+			depth++;
+		} else if (spaces != 0) {
+			break;
+		}
+	}
+
+	return depth == 0 ? null : {
+		depth: depth,
+		line: line.substr(depth + spaces)
+	};
+};
+
+const getImage = Pattern.compile("^([\s\S]+?)?\\{([\\w-]+(?::\\d+)?)\\}([\s\S]*)$");
+const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\s+)$");
 
 const addSection = (table, section, size) => {
 	const text = table.add("[stat]" + section).growX().center().padTop(16).get();
-	text.setAlignment(Align.center);
+	text.alignment = Align.center;
 	const textwidth = text.prefWidth;
 
 	/* Underline */
 	table.row();
-	table.addImage().color(Pal.stat).height(2 + 2 * size)
+	table.image().color(Pal.stat).height(2 + 2 * size)
 		.width(textwidth).center().padBottom(16);
 };
 
 /* Add image in the format {texture[:size]} */
 const addImage = (table, str) => {
-	const matched = str.match(/^([\w-]+)\s*:\s*(\d+)$/);
-	const name = matched ? matched[1] : str;
-	const region = Core.atlas.find(name);
-	const size = matched ? matched[2] : region.height;
+	const matched = getSize.matcher(str);
+	const found = matched.find();
 
-	const img = table.addImage(region).left().top()
+	const name = found ? matched.group(1) : str;
+	const region = Core.atlas.find(name);
+	const size = found ? matched.group(2) : region.height;
+
+	const img = table.image(region).left().top()
 		.height(size).width(size * (region.width / region.height));
 	if (centered) {
 		img.center();
@@ -52,6 +82,12 @@ module.exports = page => {
 	for (var i in page.content) {
 		var line = page.content[i];
 		table.row();
+
+		/* Preserve empty lines */
+		if (!line) {
+			table.add(" ");
+			continue;
+		}
 
 		centered = false;
 		var textfunc = cell => {
@@ -69,9 +105,9 @@ module.exports = page => {
 		}
 
 		// [^] = lua and maybe c regex ".", match ALL characters, even evil newlines.
-		var section = line.match(/^(#+)\s*([^]+)/);
+		var section = getSection(line);
 		if (section) {
-			addSection(table, section[2], section[1].length);
+			addSection(table, section.line, section.depth);
 			continue;
 		}
 
@@ -84,10 +120,12 @@ module.exports = page => {
 
 		/* Check for images */
 		while (true) {
-			var image = line.match(/^([^]+?)?\{([\w-]+(?::\d+)?)\}([^]*)$/)
-			if (!image) break;
+			var image = getImage.matcher(line);
+			if (!image.find()) break;
 
-			var before = image[1], img = image[2], after = image[3];
+			var before = image.group(1);
+			var img = image.group(2);
+			var after = image.group(3);
 			if (before) {
 				textfunc(table.add(before));
 			}

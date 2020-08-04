@@ -20,7 +20,7 @@ require("rtfm/docs");
 require("rtfm/button");
 
 const setup = () => {
-	const dialog = extendContent(FloatingDialog, "$rtfm.manual-pages", {
+	const dialog = extendContent(BaseDialog, "$rtfm.manual-pages", {
 		view(page) {
 			rtfm.currentPage = page;
 
@@ -31,7 +31,7 @@ const setup = () => {
 				this.addCloseButton();
 			} else {
 				this.title.text = page.title(page);
-				this.buttons.addImageTextButton("$back", Icon.left, () => {
+				this.buttons.button("$back", Icon.left, () => {
 					this.view(page.section);
 				});
 			}
@@ -49,13 +49,13 @@ const setup = () => {
 			const t = this.cont;
 			var rebuild;
 
-			t.table(search => {
+			t.table(extend(Cons, {get(search) {
 				search.left();
-				search.addImage(Icon.zoom);
-				search.addField("", text => {
+				search.image(Icon.zoom);
+				search.field("", text => {
 					rebuild(text.toLowerCase());
 				}).growX();
-			}).fillX().padBottom(4);
+			}})).fillX().padBottom(4);
 			t.row();
 
 			t.pane(pages => {
@@ -112,21 +112,21 @@ const setup = () => {
 	dialog.view(rtfm);
 };
 
-Events.on(EventType.ClientLoadEvent, setup);
+Events.on(ClientLoadEvent, setup);
 
 const addButton = () => {
 	// AboutDialog clears after 1 tick, so this waits 2
 	const override = () => Time.run(2, () => {
-		Vars.ui.about.buttons.addButton("$rtfm.manuals", rtfm.showManual)
+		Vars.ui.about.buttons.button("$rtfm.manuals", rtfm.showManual)
 			.size(200, 64).name("manuals");
 	});
 
 	Vars.ui.about.shown(override);
-	Events.on(EventType.ResizeEvent, override);
+	Events.on(ResizeEvent, override);
 };
 
 if (Vars.ui.about) {
 	addButton();
 } else {
-	Events.on(EventType.ClientLoadEvent, addButton);
+	Events.on(ClientLoadEvent, addButton);
 }

@@ -15,6 +15,8 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+(() => {
+
 /* Only load once when required multiple times */
 if (this.global.rtfm) {
 	module.exports = this.global.rtfm;
@@ -26,7 +28,7 @@ const rtfm = {
 
 	addButton(table, page) {
 		const title = (page.pages ? "[stat]" : "") + page.name;
-		const button = table.addButton(title, () => {
+		const button = table.button(title, () => {
 			rtfm.dialog.view(page);
 		}).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
@@ -41,10 +43,6 @@ const rtfm = {
 	},
 
 	addPage(name, page, section) {
-		if (name[0] == '$') {
-			name = Core.bundle.get(name.substr(1));
-		}
-
 		// Default section is the manual index
 		section = section || rtfm;
 		var path = section.path + "/" + name;
@@ -52,7 +50,7 @@ const rtfm = {
 		/* addPage(String) */
 		if (page == null) {
 			page = readString(path)
-				.split("\n").replace(/\t/g, "    ");
+				.replace(/\t/g, "    ").split("\n");
 		}
 
 		/* addPage(String, String[]) */
@@ -71,6 +69,10 @@ const rtfm = {
 
 		if (!page.title) {
 			page.title = rtfm.getTitle;
+		}
+
+		if (name[0] == '$') {
+			name = Core.bundle.get(name.substr(1));
 		}
 
 		page.table = null;
@@ -114,9 +116,10 @@ const rtfm = {
 		// Remove any elements added before the error
 		table.clear();
 
-		table.add("[red]Failed to build page![]");
+		Log.err("Failed to build page: @", error);
+		table.add("[red]Failed to build page![]").center();
 		table.row();
-		table.add(error + "").get().wrap = true;
+		table.add(error + "").grow().center().top().get().wrap = true;
 	},
 
 	showPage(page) {
@@ -140,10 +143,12 @@ const rtfm = {
 	},
 
 	pages: {},
-	path = "manuals";
+	path: "manuals",
 	currentPage: null,
 	dialog: null
 };
 
 module.exports = rtfm;
 this.global.rtfm = rtfm;
+
+})();

@@ -34,7 +34,7 @@ try {
 	rtfm.addPage("s p a c e", {
 		build(page) {
 			page.table.table(t => {
-				t.addImageTextButton("[yellow]egg", Icon.trash, () => {
+				t.button("[yellow]egg", Icon.trash, () => {
 					print("Execute router 66");
 				}).center().size(500, 40);
 			}).size(4000);
