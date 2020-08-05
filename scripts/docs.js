@@ -19,16 +19,6 @@
 
 const rtfm = require("rtfm/library");
 
-rtfm.addPage("test");
-
-rtfm.addSection("a", {
-	b: {
-		c: ["egg"],
-		d: ["yes","no"]
-	},
-	e: ["h"]
-})
-
 rtfm.addSection("$rtfm.docs.title", {
 	"$rtfm.docs.getting-started": null,
 	"$rtfm.docs.api": null,
