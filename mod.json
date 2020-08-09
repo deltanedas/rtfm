@@ -2,7 +2,7 @@
 	"name": "rtfm",
 	"displayName": "[red]R[yellow]T[green]F[blue]M",
 	"author": "DeltaNedas",
-	"description": "Mod that adds a manual page library. RTFM in the Info menu.",
+	"description": "Mod that adds a manual page library. RTFM in the About menu.\n[stat]Optionally requires [#00aaff]DeltaNedas/ui-lib[] for extra buttons.",
 	"version": "1.4.0",
 	"hidden": true
 }
