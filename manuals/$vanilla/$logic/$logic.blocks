@@ -1,0 +1,35 @@
+# Blocks
+## Message Block
+Can be written to with [stat]printflush [coral]Building[][].
+Cannot be read from.
+Acts like a 5.0 message block otherwise.
+
+## Switch
+Toggles output when clicked.
+Read with [stat]sensor[] on [coral]@enabled[].
+Cannot be written to with [stat]control[].
+
+## Micro Processor
+This block runs the logic assembly code.
+It has connection [coral]Building[]s which are in const variables [ammo]@<index>[],
+ this variable is shown when selecting the processor.
+It can connect to any block in a 10 tile radius.
+With regards to instructions:
+	- Holds 2000 instructions. (temporary)
+	- Runs 2 instructions every tick.
+
+## Logic Processor
+Like a [royal]Micro Processor[], with some modifications:
+	- Range is doubled to 20 tiles.
+	- 5 instructions are ran per tick, 2.5x faster.
+	- 2x2 instead of a 1x1
+
+## Display
+An 80x80 canvas that [stat]drawflush[] instructions render on.
+It can handle polygons with up to 25 sides.
+The framebuffer only needs to be drawn to once for static images.
+
+## Memory Cell
+Has 32 [coral]double[]s of memory.
+Use the [stat]read[]/[stat]write[] instructions on it.
+Memory can be shared between processors.

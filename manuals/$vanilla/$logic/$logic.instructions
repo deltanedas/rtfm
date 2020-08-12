@@ -1,0 +1,138 @@
+## Doc Syntax
+Instructions are described as follows:
+[royal]instruction name[] Type name, ...
+Type may be:
+	bool: true or false, 1 or 0
+	int: number with no decimal
+	double: number with optional decimal
+	Unit: a unit in the world
+	Building: a block in the world
+	String: text enclosed in quotes ([coral]""[])
+	Sensable: An Item, Liquid or Building property.
+		A full list is shown when the pencil button is pressed.
+	Op: Mathematical operation
+	Val: variable holding a double, String or Building
+Values may be passed directly or from a variable.
+The following are equivalent:
+	[royal]set[] [stat]egg[] [coral]"egg yum yum"[]
+	[royal]print[] [stat]egg[]
+and
+	[royal]print[] [coral]"egg yum yum"[]
+
+# Colours
+The following colours have special meaning:
+	[royal][[royal][]: Instruction name
+	[violet][[violet][]: Sub-instruction name
+	[coral][[coral][]: Hard-coded value or instruction parameter.
+	[stat][[stat][]: Variable name, the variable it refers to holds the real value.
+		In instruction definitions, not examples, it signifies a param type.
+
+## Writing
+
+Mindustry logic can be written in a text editor like assembly, or graphically in a logic block.
+
+Examples of both:
+[royal]draw[] [violet]clear[] [coral]0 0 0 0 0 0[]
+[royal]drawflush[] [stat]$@[]
+{rtfm-instruction-example}
+(In this case the draw instruction has 6 values, [coral]clear[] only uses 3 so only 3 are shown)
+
+## Instructions
+[royal]write[] [stat]double[] value, [stat]Building[] cell, [stat]int[] address
+	Sets the [stat]double[] at [coral]address[] of [coral]cell[] to [coral]value[].
+	Does nothing on blocks other than memory cells.
+
+[royal]read[] [stat]Var[] store, [stat]Building[] cell, [stat]int[] address
+	Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
+	Does nothing on blocks other than memory cells.
+
+[royal]draw
+	These sub-instructions queue operations that are run with [royal]drawflush[].
+
+	[violet]clear[] [stat]int[] r, g, b
+		Fills the display with a colour.
+
+	[violet]color[] [stat]int[] r, g, b
+		Sets the colour for future operations.
+
+	[violet]stroke[] [stat]int[] width
+		Sets line width for future [violet]*line[] operations
+
+	[violet]line[] [stat]int[] x1, y1, x2, y2
+		Draw a line from one point to another.
+
+	[violet]rect[] [stat]int[] x, y, w, h
+		Draw a rectangle with bottom left corner [stat]x, y[] and top right corner [stat]x + w, y + h[].
+
+	[violet]rectLine[] [stat]int[] x, y, w, h
+		Like [violet]rect[] but with lines.
+
+	[violet]poly[] [stat]int[] x, y, sides, [stat]double[] radius, rotation
+		Draw an equilateral polygon centered on a point.
+		A circle may be drawn with many sides.
+
+	[violet]polyLine[] [stat]int[] x, y, sides, [stat] double[] radius, position
+		Like [violet]poly[] but with lines.
+
+	[violet]triangle[] [stat]int[] x1, y1, x2, y2, x3, y3
+		Draw a triangle with 3 points.
+		Has no [violet]line equivalent.
+
+[royal]drawflush[] [stat]Building[] display
+	Flush all pending [royal]draw[] operations to a display.
+	They are drawn on the next tick.
+
+[royal]print[] [stat]String[] text
+	Add [stat]text[] to the processor's print buffer.
+
+[royal]printflush[] [stat]Building[] msgblock
+	Set [stat]msgblock[]'s text to the processor's print buffer.
+
+[royal]control
+	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
+		Enable a block like a conveyor.
+		Does not work for things like Walls, Switches, etc.
+
+	[violet]shoot[] [stat]Building[] turret, [stat]double[] x, y, [stat]bool[] shoot
+		Tell the turret to fire at an absolute position in World Units.
+		If [stat]shoot[] is false it will cease firing.
+		(1 tile = 8 WU)
+
+[royal]radar[] [stat]Building[] turret, [stat]TargetType[] prop1, prop2, prop3, [stat]int[] index, [stat]Val[] output
+	Radar gets a list of units targetable by a [coral]turret[].
+	[coral]Prop1-3[] are different properties that a target must have to be valid.
+	For example, [coral]player any any[] will match any player target,
+		but [coral]player block any[] will only match player blocks
+		and [coral]any any any[] matches any block or unit at all.
+	(Player refers to this turret's team)
+
+	This list of targets has its [coral]index[]th member put in [coral]output[].
+	The target can be a [stat]Unit[] or [stat]Building[].
+
+[royal]sensor[] [stat]Val[] store, [stat]Sensable[] sense, [stat]Building[] block
+	Extract information [stat]sense[] from [stat]block[], saved to [stat]store[].
+	For example, to get the amount of graphite in a block:
+		[royal]sensor[] [stat] graphcount @graphite $@
+	Use the number in [stat]graphcount[] afterwards.
+
+[royal]set[] [stat]Val[] varname [stat]Val[] value
+	Set a variable with name [stat]varname[] to [stat]value[].
+	For example, to copy [stat]@this[] into [stat]block[]:
+		[royal]set[] [stat]block @this[]
+
+[royal]bop[] [stat]Val[] result, [stat]double[] a, [stat]Op[] op, [stat]double[] b
+	Set [stat]result[] to the output of a two-number mathematical operation.
+
+[royal]uop[] [stat]Val[] result, [stat]Op[] op, [stat]double[] n
+	Set [stat]result[] to the output of a one-number mathematical operation.
+
+[royal]end
+	Shorthand for [royal]jump[] [coral]0 0 equal 0[].
+
+[royal]jump[] [coral]int[] inst, [stat]Val[] a, [stat]Comp[] comp, [stat]Val[] b
+	Jumps to [coral]inst[] if [coral]a comp b[] is true.
+	The instruction index does not change in the graphical editor.
+
+# Version
+This manual page was written for BE 9251.
+Newer versions may differ.

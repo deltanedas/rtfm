@@ -15,13 +15,20 @@
 	along with this program.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* Documentation for the library */
-
 const rtfm = require("rtfm/library");
 
+/* Documentation for the library */
 rtfm.addSection("$rtfm.docs.title", {
 	"$rtfm.docs.getting-started": null,
 	"$rtfm.docs.api": null,
 	"$rtfm.docs.format": null,
 	"$rtfm.docs.colours": null
+});
+
+/* Documentation for 6.0 stuff */
+rtfm.addSection("$vanilla", {
+	"$logic": {
+		"$logic.instructions": null,
+		"$logic.blocks": null
+	}
 });
