@@ -30,6 +30,6 @@ It can handle polygons with up to 25 sides.
 The framebuffer only needs to be drawn to once for static images.
 
 ## Memory Cell
-Has 32 [coral]double[]s of memory.
+Has 64 [coral]double[]s of memory.
 Use the [stat]read[]/[stat]write[] instructions on it.
 Memory can be shared between processors.
