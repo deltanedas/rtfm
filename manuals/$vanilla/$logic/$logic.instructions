@@ -11,7 +11,7 @@ Type may be:
 	Sensable: An Item, Liquid or Building property.
 		A full list is shown when the pencil button is pressed.
 	Target: Trait to filter a unit or block by
-	Op: Mathematical operation
+	Op: Mathematical operation, unary or binary
 	Val: variable holding a double, String or Building
 Values may be passed directly or from a variable.
 The following are equivalent:
@@ -136,11 +136,9 @@ Linked blocks show their associated variable when the processor is selected.
 	For example, to copy [stat]@this[] into [stat]block[]:
 		[royal]set[] [stat]block @this[]
 
-[royal]bop[] [stat]Val[] result, [stat]double[] a, [stat]Op[] op, [stat]double[] b
-	Set [stat]result[] to the output of a two-number mathematical operation.
-
-[royal]uop[] [stat]Val[] result, [stat]Op[] op, [stat]double[] n
-	Set [stat]result[] to the output of a one-number mathematical operation.
+[royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[[stat]double[] b]
+	Set [stat]result[] to the output of a mathematical operation.
+	if [coral]b[] is not set then it is ignored for a unary operation.
 
 [royal]end
 	Shorthand for [royal]jump[] [coral]0 0 equal 0[].
