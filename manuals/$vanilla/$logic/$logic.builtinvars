@@ -26,7 +26,7 @@ These can't be edited, it would be a no-op to do so.
 	Example code to iterate over them all:
 		[stat]set[] [royal]i[] [coral]0
 		[stat]getlink[] [royal]block i
-		[stat]jump[] [coral]1 equal[] [royal]i @links
+		[stat]jump[] [coral]1 lessThan[] [royal]i @links
 
 [royal]Building[] [pink]suffix<n>
 	Constant that refers to the [pink]n[]th connected [pink]suffix[] building.
@@ -62,8 +62,8 @@ These can be set for certain functionality.
 	You must set this to jump to a variable.
 	Example for call and ret:
 		# Save where we will leave off after the jump
-		[stat]op[] [pink]add[] [royal]retaddr @counter[] [coral]1[]
-		[stat]set[] [royal]@counter .coolfunc[]
+		[stat]op[] [pink]add[] [royal]retaddr @counter[] [coral]1
+		[stat]set[] [royal]@counter .coolfunc
 		...
 		# In coolfunc, return to caller
-		[stat]set[] [royal]@counter retaddr[]
+		[stat]set[] [royal]@counter retaddr
