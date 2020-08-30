@@ -50,7 +50,7 @@ const rtfm = {
 		/* addPage(String) */
 		if (page == null) {
 			page = readString(path)
-				.replace(/\t/g, "		").split("\n");
+				.replace(/\t/g, "    ").split("\n");
 		}
 
 		/* addPage(String, String[]) */
