@@ -1,0 +1,69 @@
+These variables are automatically provided to any processor:
+
+## Constants
+These can't be edited, it would be a no-op to do so.
+
+# Primitives
+[royal]int[] false = 0
+[royal]int[] true = 1
+[royal]Object[] null = null
+
+# Processor
+[royal]Building[] @this
+	The processor executing the instruction
+
+[royal]double[] @thisx
+[royal]double[] @thisy
+	Shortcuts for [stat]sensor[].
+
+[royal]int[] @ipt
+	How many instructions are executed every tick on this type of processor.
+	Probably useful for a clock.
+
+# Links
+[royal]int[] @links
+	Number of links for use with [stat]getlink[].
+	Example code to iterate over them all:
+		[stat]set[] [royal]i[] [coral]0
+		[stat]getlink[] [royal]block i
+		[stat]jump[] [coral]1 equal[] [royal]i @links
+
+[royal]Building[] [pink]suffix<n>
+	Constant that refers to the [pink]n[]th connected [pink]suffix[] building.
+	Suffix is the last part of a block's internal name.
+	[pink]N[] starts with 1 and currently to be changed you must replace the processor.
+	[pink]N[] increases with the block's suffix, not for the bloco specifically.
+	Example:
+		ripple -> ripple1
+		[red]item-[]source -> source1
+		second [red]routorio-[]holorouter -> holorouter2
+		[red]routorio-arc-[]router -> router1
+
+# Sensable properties
+[royal]Item[] @[pink]item-internal-name
+	See [stat]Items.java[] and any mods for valid internal names.
+	[stat](first argument to constructor, modname-<filename without .json>)
+
+[royal]Liquid[] @[pink]liquid-internal=name
+	See [stat]Liquids.java[] and any mods for valid internal names.
+	[stat](first argument to constructor, modname-<filename without .json>)
+
+[royal]String[] @[pink]others
+	Used for accessing various properties of a [royal]Building[].
+	Too many to list here, see the right tab of [stat]sensor[]'s picker.
+
+## Variables
+These can be set for certain functionality.
+
+# Processor
+[royal]int[] @counter
+	Equivalent to %IP in x86.
+	Value is where to read the next instruction from.
+	You must set this to jump to a variable.
+	Example for call and ret:
+		# Save where we will leave off after the jump
+		[stat]op[] [pink]add[] [royal]retaddr @counter[] [coral]1[]
+		[stat]set[] [royal]@counter .coolfunc[]
+		...
+		# In coolfunc, return to caller
+		[stat]set[] [royal]@counter retaddr[]

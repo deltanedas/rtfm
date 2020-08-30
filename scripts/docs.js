@@ -29,6 +29,7 @@ rtfm.addSection("$rtfm.docs.title", {
 rtfm.addSection("$vanilla", {
 	"$logic": {
 		"$logic.instructions": null,
-		"$logic.blocks": null
+		"$logic.blocks": null,
+		"$logic.builtinvars": null
 	}
 });
