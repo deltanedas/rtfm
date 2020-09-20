@@ -2,7 +2,7 @@
 	"name": "rtfm",
 	"displayName": "[red]R[yellow]T[green]F[blue]M",
 	"author": "DeltaNedas",
-	"description": "Mod that adds a manual page library. RTFM in the About menu.\n[stat]Optionally requires [#00aaff]DeltaNedas/ui-lib[] for extra buttons.",
+	"description": "Mod that adds a manual page library. RTFM in the About menu.\nComes with documentation of vanilla'a [purple]Logic[] system.\n[stat]Optionally requires [#00aaff]DeltaNedas/ui-lib[] for extra buttons.",
 	"version": "2.6.4",
 	"hidden": true,
 	"minGameVersion": 105
