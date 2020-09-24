@@ -58,3 +58,6 @@ $rtfm.docs.bundle-line
 		Parent section of this page, or [stat]rtfm[] if a root page.
 	[stat]Object<String name, Page page> pages = [coral]undefined
 		Map of names to child pages, undefined for normal pages.
+	[royal]float[] scroll = [coral]0
+		Last scrollbar Y position.
+		You shouldn't ever need this.

@@ -131,7 +131,7 @@ const setup = () => {
 			this.pagePane = pane;
 
 			Core.app.post(() => {
-				Core.scene.setScrollFocus(pane));
+				Core.scene.setScrollFocus(pane);
 
 				// Load last position
 				pane.scrollYForce = page.scroll;
