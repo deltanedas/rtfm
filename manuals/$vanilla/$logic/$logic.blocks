@@ -24,10 +24,22 @@ Like a [royal]Micro Processor[], with some modifications:
 	- 5 instructions are ran per tick, 2.5x faster.
 	- 2x2 instead of a 1x1
 
+## Hyper Processor
+Above except:
+	- Range is 43 blocks
+	- 25 instructions per tick, 12.5x faster than a micro processor.
+	- Requires cryofluid to process instructions
+	- 3x3 instead of 2x2
+This outranges a ripple, use them as radars.
+
 ## Display
 An 80x80 canvas that [stat]drawflush[] instructions render on.
 It can handle polygons with up to 25 sides.
 The framebuffer only needs to be drawn to once for static images.
+
+## Large Display
+Like the [royal]Display[] but 6x6 and with a 176x176 canvas size.
+You cannot draw more detailed polygons with it.
 
 ## Memory Cell
 Has 64 [coral]double[]s of memory.
