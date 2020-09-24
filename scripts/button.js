@@ -17,9 +17,10 @@
 
 /* Add buttons with DeltaNedas/ui-lib */
 
+const rtfm = this.global.rtfm;
+
 try {
 	const ui = require("ui-lib/library");
-	const rtfm = require("rtfm/library");
 
 	ui.addButton("manuals", "bookOpen", rtfm.showManual);
 	ui.addMenuButton("$rtfm.manuals", "bookOpen", rtfm.showManual);
@@ -27,3 +28,11 @@ try {
 	// ui-lib not installed, oh no
 	Log.warn("Install [#00aaff]DeltaNedas/ui-lib[] for extra manual buttons.");
 }
+
+/* Add a button for the logic manual inside the processor dislog */
+
+Events.on(ClientLoadEvent, () => {
+	Vars.ui.logic.buttons.button(Icon.book, () => {
+		rtfm.showPage("$logic/$logic.instructions");
+	}).size(64);
+});

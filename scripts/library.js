@@ -29,7 +29,7 @@ const rtfm = {
 	addButton(table, page) {
 		const title = (page.pages ? "[stat]" : "") + page.name;
 		const button = table.button(title, () => {
-			rtfm.dialog.view(page);
+			rtfm.dialog.view(page, false);
 		}).width(300).height(60).marginLeft(16).padBottom(8).get();
 		button.getLabel().setAlignment(Align.left);
 	},
@@ -71,28 +71,32 @@ const rtfm = {
 			page.title = rtfm.getTitle;
 		}
 
+		// Use $bundlename for page keys
+		section.pages[name] = page;
 		if (name[0] == '$') {
 			name = Core.bundle.get(name.substr(1));
 		}
 
 		page.table = null;
+		page.scroll = 0;
 		page.name = name;
 		page.section = section;
 		page.path = path;
 
-		section.pages[name] = page;
 		return page;
 	},
 
 	addPages(pages, section) {
 		for (var i in pages) {
-			rtfm.addPage(paged[i], null, section);
+			rtfm.addPage(pages[i], null, section);
 		}
 	},
 
 	addSection(name, pages, parent) {
 		const section = rtfm.addPage(name, {
-			pages: {}
+			pages: {},
+			// Hopefully this isn't needed lol
+			scroll: 0
 		}, parent);
 
 		for (var pname in pages) {
@@ -122,19 +126,21 @@ const rtfm = {
 		table.add(error + "").grow().center().top().get().wrap = true;
 	},
 
-	showPage(page) {
+	showPage(page, temporary) {
 		if (typeof(page) == "string") {
-			var section = rtfm.pages;
-			while (true) {
-				var matched = page.match(/^([^/]+)\s*\/\s*(\S+)/);
-				if (!matched) break;
-				section = section.pages[matched[1]];
-				page = matched[2];
+			const parts = page.split("/");
+			page = rtfm;
+			for (var part of parts) {
+				var section = page;
+				page = section.pages[part];
+				if (!page) {
+					throw "Unknown page '" + part + "' in " + section.path +
+						", valid pages are " + Object.keys(section.pages).join(", ");
+				}
 			}
-			page = rtfm.pages[page];
 		}
 
-		rtfm.dialog.view(page);
+		rtfm.dialog.view(page, temporary);
 		rtfm.dialog.show();
 	},
 
@@ -142,8 +148,11 @@ const rtfm = {
 		rtfm.dialog.show();
 	},
 
+	// Page light implementation
 	pages: {},
+	scroll: 0,
 	path: "manuals",
+
 	currentPage: null,
 	dialog: null
 };

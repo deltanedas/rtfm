@@ -26,10 +26,8 @@ rtfm.addSection("$rtfm.docs.title", {
 });
 
 /* Documentation for 6.0 stuff */
-rtfm.addSection("$vanilla", {
-	"$logic": {
-		"$logic.instructions": null,
-		"$logic.blocks": null,
-		"$logic.builtinvars": null
-	}
+rtfm.addSection("$logic", {
+	"$logic.instructions": null,
+	"$logic.blocks": null,
+	"$logic.builtinvars": null
 });

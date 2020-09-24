@@ -21,18 +21,36 @@ require("rtfm/button");
 
 const setup = () => {
 	const dialog = extendContent(BaseDialog, "$rtfm.manual-pages", {
-		view(page) {
-			rtfm.currentPage = page;
-
+		view(page, temporary) {
 			this.buttons.clearChildren();
 
 			if (page == rtfm) {
 				this.title.text = Core.bundle.get("rtfm.manual-pages");
-				this.addCloseButton();
 			} else {
 				this.title.text = page.title(page);
-				this.buttons.button("$back", Icon.left, () => {
-					this.view(page.section);
+			}
+
+			if (temporary) {
+				this.addCloseButton();
+			} else {
+				rtfm.currentPage = page;
+
+				if (page == rtfm) {
+					this.addCloseButton();
+					// Save current scroll when closing rtfm
+				} else {
+					this.buttons.button("$back", Icon.left, () => {
+						page.scroll = this.pagePane.scrollY;
+
+						this.view(page.section, false);
+					});
+				}
+			}
+
+			// Add on the default close button
+			if (temporary || page == rtfm) {
+				this.buttons.cells.peek().get().clicked(() => {
+					page.scroll = this.pagePane.scrollY;
 				});
 			}
 
@@ -58,7 +76,7 @@ const setup = () => {
 			}})).fillX().padBottom(4);
 			t.row();
 
-			t.pane(pages => {
+			const pane = t.pane(pages => {
 				rebuild = query => {
 					pages.clear();
 
@@ -88,7 +106,9 @@ const setup = () => {
 					func(pagenames.sort());
 				};
 				rebuild();
-			}).top().margin(20).padBottom(8);
+			}).top().margin(20).padBottom(8).get();
+
+			this.initScroll(pane, section);
 		},
 
 		/* Show the manual page */
@@ -104,12 +124,23 @@ const setup = () => {
 
 			const pane = new ScrollPane(page.table);
 			this.cont.add(pane).grow();
-			Core.app.post(() => Core.scene.setScrollFocus(pane));
+			this.initScroll(pane, page);
+		},
+
+		initScroll(pane, page) {
+			this.pagePane = pane;
+
+			Core.app.post(() => {
+				Core.scene.setScrollFocus(pane));
+
+				// Load last position
+				pane.scrollYForce = page.scroll;
+			});
 		}
 	});
 
 	rtfm.dialog = dialog;
-	dialog.view(rtfm);
+	dialog.view(rtfm, false);
 };
 
 Events.on(ClientLoadEvent, setup);

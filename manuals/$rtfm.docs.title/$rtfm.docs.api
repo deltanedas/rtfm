@@ -20,9 +20,10 @@
 	If it is, the section's title and the page's name is returned.
 	Default for [stat]Page.title[].
 
-[stat]showPage(Page name)
+[stat]showPage(Page name, boolean temporary = false)
 	Show a manual page.
 	Name may be a String, for [stat]rtfm.pages[].
+	If [sky]temporary[] is true, back will just close the dialog and the current page will not be changed.
 	Called by [stat]rtfm.addButton[].
 
 [stat]showManual()

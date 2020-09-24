@@ -40,7 +40,7 @@ Examples of both:
 
 # Links
 Blocks linked to the processor can be gotten from
-[stat]read[] [royal]block[] [coral]0
+[royal]getlink[] [royal]block[] [coral]0
 or
 [royal]<blockname>1
 Where the latter is like Lua, it is 1-indexed.
