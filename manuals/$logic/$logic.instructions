@@ -51,16 +51,14 @@ Linked blocks show their associated variable when the processor is selected.
 	Sets the [stat]double[] at [coral]address[] of [coral]cell[] to [coral]value[].
 	Does nothing on blocks other than memory cells.
 
-[royal]read[] [stat]Var[] store,
-	[stat]Building[] cell, [stat]int[] address
+[royal]read[] [stat]Var[] store, [stat]Building[] cell, [stat]int[] address
 		Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
 		Does nothing on blocks other than memory cells.
 
-	[stat]int[] index
+[royal]getlink[] [stat]Var[] store, [stat]int[] index
 		Gets linked tile #[coral]index[] and puts it in [coral]store[].
 		Can be used for things like iterating over all linked blocks.
 		Can be iterated over C string style or array style with [royal]@links[].
-		Graphically, represented by the [stat]Get Link[] block.
 
 [royal]draw
 	These sub-instructions queue operations that are run with [royal]drawflush[].
@@ -155,5 +153,5 @@ Linked blocks show their associated variable when the processor is selected.
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 9263.
+This manual page was written for BE 9996.
 Newer versions may differ.
