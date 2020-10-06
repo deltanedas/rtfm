@@ -167,7 +167,8 @@ Think of them like GPU shader programs, you have to think generically without mu
 You cannot narrow down instructions to certain units.
 
 [royal]ubind[] [stat]UnitType[] type
-	Loads all units of a certain type into the unit register.
+	Loads all units of a certain type into the units cache.
+	This cache is read from into [stat]@unit[] which other instructions use.
 	Won't work across teams.
 	[coral]Currently has no range limit.
 
@@ -177,10 +178,10 @@ You cannot narrow down instructions to certain units.
 		[stat]@poly
 
 [royal]ucontrol
-	Act on units in the unit register.
+	Act on [stat]@unit[].
 
 	[violet]stop
-		Stoo moving, i.e. move to the current position.
+		Stop moving, i.e. move to the current position.
 
 	[violet]move[] [stat]double[] x, y
 		Move to a position on the map.
@@ -194,7 +195,7 @@ You cannot narrow down instructions to certain units.
 		Enable or disable boosting for mechs.
 
 	[violet]pathfind
-		Return control of the units to AI. [red](?)
+		Return control of the unit to AI. [red](?)
 
 	[violet]target[] [stat]double[] x, y, [stat]boolean[] shoot
 		[royal]control[] [violet]shoot[] but for units.
@@ -213,11 +214,11 @@ You cannot narrow down instructions to certain units.
 		Does nothing if it's not minable.
 
 	[violet]flag[] [stat]double[] flag
-		Sets the units' flag to a number.
-		No idea what it's for.
+		Sets the unit's flag to a number.
+		Read it back with [royal]sensor[] [stat]flag @unit flagVar[]
 
 	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
-		Build a block at a certain position, in world units not tiles.
+		Build a block at a certain position in world units, not tiles.
 		Block is in the form [stat]@[][pink]<id>[].
 		Examples:
 			[stat]@router

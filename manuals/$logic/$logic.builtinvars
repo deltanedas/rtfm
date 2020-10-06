@@ -44,13 +44,31 @@ These can't be edited, it would be a no-op to do so.
 	See [stat]Items.java[] and any mods for valid internal names.
 	[stat](first argument to constructor, modname-<filename without .json>)
 
-[royal]Liquid[] @[pink]liquid-internal=name
+[royal]Liquid[] @[pink]liquid-internal-name
 	See [stat]Liquids.java[] and any mods for valid internal names.
 	[stat](first argument to constructor, modname-<filename without .json>)
 
+[royal]Block[] @[pink]block-internal-name
+	See [stat]Blocks.java[] and any mods for valid internal names.
+	These are used by [stat]ucontrol[] [violet]build[] and [red]have no picker[], you need to know them yourself.
+
+[royal]UnitType[] @[pink]unit-internal-name
+	See [stat]UnitTypes.java[] and any mods for valid internal names.
+	These are used by [stat]ubind[] and have a picker.
+
 [royal]String[] @[pink]others
 	Used for accessing various properties of a [royal]Building[].
+
 	Too many to list here, see the right tab of [stat]sensor[]'s picker.
+
+# Misc
+
+[royal]Unit[] @unit = null
+	Current bound unit.
+	Only set by [royal]ubind[].
+
+[royal]double[] @time
+	Set to the current UNIX timestamp, in milliseconds.
 
 ## Variables
 These can be set for certain functionality.
