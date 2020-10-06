@@ -1,6 +1,8 @@
 ## Doc Syntax
 Instructions are described as follows:
-[royal]instruction name[] Type name, ...
+[royal]instruction name[] [stat]Type[] arg, ...
+Arguments inherit the previous type if not specified.
+
 Type may be:
 	bool: true or false, 1 or 0
 	int: number with no decimal
@@ -8,17 +10,12 @@ Type may be:
 	Unit: a unit in the world
 	Building: a block in the world
 	String: text enclosed in quotes ([coral]""[])
+	Val: A variable name used as a generic or to hold a value.
 	Sensable: An Item, Liquid or Building property.
 		A full list is shown when the pencil button is pressed.
 	Target: Trait to filter a unit or block by
 	Op: Mathematical operation, unary or binary
-	Val: variable holding a double, String or Building
-Values may be passed directly or from a variable.
-The following are equivalent:
-	[royal]set[] [stat]egg[] [coral]"egg yum yum"[]
-	[royal]print[] [stat]egg[]
-and
-	[royal]print[] [coral]"egg yum yum"[]
+	etc.
 
 # Colours
 The following colours have special meaning:
@@ -27,6 +24,14 @@ The following colours have special meaning:
 	[coral][[coral][]: Hard-coded value or instruction parameter.
 	[stat][[stat][]: Variable name, the variable it refers to holds the real value.
 		In instruction definitions, not examples, it signifies a param type.
+
+## Basics
+Values may be passed directly or from a variable, unless specified otherwise.
+The following are equivalent:
+	[royal]set[] [stat]egg[] [coral]"egg yum yum"[]
+	[royal]print[] [stat]egg[]
+and
+	[royal]print[] [coral]"egg yum yum"[]
 
 ## Writing
 
@@ -47,18 +52,17 @@ Where the latter is like Lua, it is 1-indexed.
 Linked blocks show their associated variable when the processor is selected.
 
 ## Instructions
+
+# Special block operations
+These instructions are for memory cells, displays and message blocks respectively.
+
 [royal]write[] [stat]double[] value, [stat]Building[] cell, [stat]int[] address
 	Sets the [stat]double[] at [coral]address[] of [coral]cell[] to [coral]value[].
 	Does nothing on blocks other than memory cells.
 
 [royal]read[] [stat]Var[] store, [stat]Building[] cell, [stat]int[] address
-		Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
-		Does nothing on blocks other than memory cells.
-
-[royal]getlink[] [stat]Var[] store, [stat]int[] index
-		Gets linked tile #[coral]index[] and puts it in [coral]store[].
-		Can be used for things like iterating over all linked blocks.
-		Can be iterated over C string style or array style with [royal]@links[].
+	Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
+	Does nothing on blocks other than memory cells.
 
 [royal]draw
 	These sub-instructions queue operations that are run with [royal]drawflush[].
@@ -102,6 +106,14 @@ Linked blocks show their associated variable when the processor is selected.
 [royal]printflush[] [stat]Building[] msgblock
 	Set [stat]msgblock[]'s text to the processor's print buffer.
 
+# General operations
+These instructions are used by almost every program.
+
+[royal]getlink[] [stat]Var[] store, [stat]int[] index
+	Gets linked tile #[coral]index[] and puts it in [coral]store[].
+	Can be used for things like iterating over all linked blocks.
+		Can be iterated over C string style or array style with [royal]@links[].
+
 [royal]control
 	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
 		Enable a block like a conveyor.
@@ -130,21 +142,115 @@ Linked blocks show their associated variable when the processor is selected.
 		[royal]sensor[] [stat] graphcount @graphite block
 	Use the number in [stat]graphcount[] afterwards.
 
-[royal]set[] [stat]Val[] varname [stat]Val[] value
+[royal]set[] [stat]Val[] varname, [stat]Val[] value
 	Set a variable with name [stat]varname[] to [stat]value[].
 	For example, to copy [stat]@this[] into [stat]block[]:
-		[royal]set[] [stat]block @this[]
+		[royal]set[] [stat]block @this
 
-[royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[[stat]double[] b]
+[royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[b]
 	Set [stat]result[] to the output of a mathematical operation.
 	if [coral]b[] is not set then it is ignored for a unary operation.
 
-[royal]end
-	Shorthand for [royal]jump[] [coral]0 0 equal 0[].
+# Control flow
 
-[royal]jump[] [coral]int[] inst, [stat]Val[] a, [stat]Comp[] comp, [stat]Val[] b
+[royal]end
+	Shorthand for [royal]jump[] [coral]0 always[].
+
+[royal]jump[] [coral]int[] inst, [stat]Comp[] comp, [stat]Val[] a, b
 	Jumps to [coral]inst[] if [coral]a comp b[] is true.
 	The instruction index does not change in the graphical editor.
+	[royal]jump[] [coral]inst always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]inst[].
+
+# Units
+These instructions work on the unit register, rather than individual units like [royal]control[] would.
+Think of them like GPU shader programs, you have to think generically without much specialization.
+You cannot narrow down instructions to certain units.
+
+[royal]ubind[] [stat]UnitType[] type
+	Loads all units of a certain type into the unit register.
+	Won't work across teams.
+	[coral]Currently has no range limit.
+
+	Examples of unit types:
+		[stat]@mono
+		[stat]@routorio-sexy-router
+		[stat]@poly
+
+[royal]ucontrol
+	Act on units in the unit register.
+
+	[violet]stop
+		Stoo moving, i.e. move to the current position.
+
+	[violet]move[] [stat]double[] x, y
+		Move to a position on the map.
+
+	[violet]approach[] [stat]double[] x, y, radius
+		Like [violet]move[], but will stop moving if within [coral]radius[] world units of the center.
+		Causes units to spread out around a position.
+		{rtfm-ucontrol-approach}
+
+	[violet]boost[] [stat]boolean[] enable
+		Enable or disable boosting for mechs.
+
+	[violet]pathfind
+		Return control of the units to AI. [red](?)
+
+	[violet]target[] [stat]double[] x, y, [stat]boolean[] shoot
+		[royal]control[] [violet]shoot[] but for units.
+
+	[violet]targetp[] [stat]Healthc[] target, [stat]boolean[] shoot
+		Shortcut for [violet]target[], gets the position of a block or unit.
+
+	[violet]itemDrop[] [stat]Building[] to, [stat]int[] amount
+		Drops at most [coral]amount[] items into a building.
+
+	[violet]itemTake[] [stat]Building[] from, [stat]Item[] item, [stat]int[] amount
+		Takes at most [coral]amount[] of an item from a building.
+
+	[violet]mine[] [stat]double[]x, y
+		Mine the ore at the position.
+		Does nothing if it's not minable.
+
+	[violet]flag[] [stat]double[] flag
+		Sets the units' flag to a number.
+		No idea what it's for.
+
+	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
+		Build a block at a certain position, in world units not tiles.
+		Block is in the form [stat]@[][pink]<id>[].
+		Examples:
+			[stat]@router
+			[stat]@routorio-double-router
+			[stat]@cryofluid-mixer
+
+	[violet]getBlock[] [stat]double[] x, y, [stat]Block[] result
+		Get the [stat]Block[] at a position.
+		Can be used with [violet]build[].
+		Cannot be printed, it will serialize as "[[content]".
+
+	[violet]within[] [stat]double[] x, y, radius, [stat]boolean[] result
+		Sets result to whether a unit is in the specified circle.
+
+[royal]uradar[] [stat]Target[] a, b, c, [stay]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
+	Like [royal]radar[], but on all units in the unit register.
+	Searches until a suitable target is found.
+
+[royal]ulocate
+	Uses units to find a block type.
+	Meant to be used to find blocks that are out of range for the unit.
+	[coral]Found[] is only set to true if [coral]outX[] and [coral]outY[] point to the desired block.
+
+	[violet]ore[] [stat]Item[] ore, [stat]double[] outX, outY, [stat]boolean[] found
+		Looks for an ore with an itemDrop of [coral]ore[].
+		Use [stat]@sand[] to find sand/dark sand, [stat]@copper[] to find copper, etc.
+
+	[violet]building[] [stat]BlockFlag[] type, [stat]boolean[] enemy, [stat]double[] outX, outY, [stat]boolean[] found
+		Looks for a building with certain pathfinder block flags.
+		If [coral]enemy[] is true, derelict blocks cannot be located.
+
+	[violet]spawn[] [stat]double[] outX, outY, [stat]boolean[] found
+		Find an enemy spawn.
 
 [royal]noop
 	Does absolutely nothing.
@@ -153,5 +259,5 @@ Linked blocks show their associated variable when the processor is selected.
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 9996.
+This manual page was written for BE 10266.
 Newer versions may differ.
