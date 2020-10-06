@@ -165,8 +165,9 @@ These instructions are used by almost every program.
 These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
 
 [royal]ubind[] [stat]UnitType[] type
-	Loads all units of a certain type into the units cache.
-	This cache is read from round-robin into [stat]@unit[] which other instructions use.
+	Loads the next cached unit of a certain [coral]type[] into [stat]@unit[].
+	It will loop over them round-robin style.
+	Other unit instructions use the unit in [stat]@unit[].
 	Won't work across teams.
 	[coral]Currently has no range limit.
 
@@ -199,7 +200,8 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 		[royal]control[] [violet]shoot[] but for units.
 
 	[violet]targetp[] [stat]Healthc[] target, [stat]boolean[] shoot
-		Shortcut for [violet]target[], gets the position of a block or unit.
+		Smart version of for [violet]target[], gets the predicted position of a block or unit.
+		Takes speed and position into account, giving a decent guess as to where the target will be.
 
 	[violet]itemDrop[] [stat]Building[] to, [stat]int[] amount
 		Drops at most [coral]amount[] items into a building.
