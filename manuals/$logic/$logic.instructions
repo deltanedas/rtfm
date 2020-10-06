@@ -168,7 +168,7 @@ You cannot narrow down instructions to certain units.
 
 [royal]ubind[] [stat]UnitType[] type
 	Loads all units of a certain type into the units cache.
-	This cache is read from into [stat]@unit[] which other instructions use.
+	This cache is read from round-robin into [stat]@unit[] which other instructions use.
 	Won't work across teams.
 	[coral]Currently has no range limit.
 
