@@ -162,9 +162,7 @@ These instructions are used by almost every program.
 	[royal]jump[] [coral]inst always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]inst[].
 
 # Units
-These instructions work on the unit register, rather than individual units like [royal]control[] would.
-Think of them like GPU shader programs, you have to think generically without much specialization.
-You cannot narrow down instructions to certain units.
+These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
 
 [royal]ubind[] [stat]UnitType[] type
 	Loads all units of a certain type into the units cache.
@@ -215,7 +213,8 @@ You cannot narrow down instructions to certain units.
 
 	[violet]flag[] [stat]double[] flag
 		Sets the unit's flag to a number.
-		Read it back with [royal]sensor[] [stat]flag @unit flagVar[]
+		Read it back with [royal]sensor[] [stat]flag @unit flagVar[].
+		Use to identify certain units.
 
 	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
 		Build a block at a certain position in world units, not tiles.
