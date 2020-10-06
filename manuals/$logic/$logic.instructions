@@ -193,7 +193,7 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 		Enable or disable boosting for mechs.
 
 	[violet]pathfind
-		Return control of the unit to AI. [red](?)
+		Make the unit follow standard AI; find enemy cores, guard spawns, obey command centers.
 
 	[violet]target[] [stat]double[] x, y, [stat]boolean[] shoot
 		[royal]control[] [violet]shoot[] but for units.
