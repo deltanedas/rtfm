@@ -24,10 +24,12 @@ try {
 	});
 
 	/* Custom elements with the default builder.
-		 Cannot be done with a file. */
+		Cannot be done with a file.
+		Needs to be run when client loads as
+		Label constructor needs Core.scene */
 	rtfm.addPage("hack zone", [
 		"You are now hack",
-		new Label(prov(() => Mathf.random(0, 10) + ""))
+		() => new Label(prov(() => Mathf.random(0, 10) + ""))
 	]);
 
 	/* Entirely custom page! */

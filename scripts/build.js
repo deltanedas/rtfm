@@ -99,6 +99,7 @@ module.exports = page => {
 		};
 
 		/* Custom elements */
+		if (typeof(line) == "function") line = line();
 		if (typeof(line) != "string") {
 			table.add(line);
 			continue;
