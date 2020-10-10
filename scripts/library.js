@@ -15,14 +15,6 @@
 	along with this program.	If not, see <https://www.gnu.org/licenses/>.
 */
 
-(() => {
-
-/* Only load once when required multiple times */
-if (this.global.rtfm) {
-	module.exports = this.global.rtfm;
-	return;
-}
-
 const rtfm = {
 	buildPage: require("rtfm/build"),
 
@@ -104,6 +96,7 @@ const rtfm = {
 			for (var name of pages) {
 				rtfm.addPage(name, null, section);
 			}
+			return section;
 		}
 
 		for (var pname in pages) {
@@ -166,5 +159,3 @@ const rtfm = {
 
 module.exports = rtfm;
 this.global.rtfm = rtfm;
-
-})();
