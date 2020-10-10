@@ -67,13 +67,13 @@ const setup = () => {
 			const t = this.cont;
 			var rebuild;
 
-			t.table(extend(Cons, {get(search) {
+			t.table(cons(search => {
 				search.left();
 				search.image(Icon.zoom);
 				search.field("", text => {
 					rebuild(text.toLowerCase());
 				}).growX();
-			}})).fillX().padBottom(4);
+			})).fillX().padBottom(4);
 			t.row();
 
 			const pane = t.pane(pages => {

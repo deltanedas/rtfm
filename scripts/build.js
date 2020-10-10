@@ -75,6 +75,7 @@ const addImage = (table, str) => {
 };
 
 module.exports = page => {
+Core.app.post(() => {
 	const table = page.table;
 	table.defaults().left();
 	table.row();
@@ -95,6 +96,8 @@ module.exports = page => {
 			if (centered) {
 				cell.center();
 				cell.get().alignment = Align.center;
+			} else {
+				cell.left();
 			}
 		};
 
@@ -139,4 +142,5 @@ module.exports = page => {
 			textfunc(table.add(line));
 		}
 	}
+});
 };
