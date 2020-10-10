@@ -102,7 +102,7 @@ const rtfm = {
 		// They're all files
 		if (Array.isArray(pages)) {
 			for (var name of pages) {
-				rtfm.readPage(name, null, section);
+				rtfm.addPage(name, null, section);
 			}
 		}
 
