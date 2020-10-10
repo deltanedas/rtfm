@@ -15,6 +15,23 @@
 	along with this program.	If not, see <https://www.gnu.org/licenses/>.
 */
 
+const translate = str => str[0] == '$' ? Core.bundle.get(str.substr(1)) : str;
+
+const readTranslated = path => {
+	const parts = path.split('/');
+	for (var i in parts) {
+		parts[i] = translate(parts[i]);
+	}
+
+	try {
+		// Blocks/Router in language of choice, fallback to english
+		return readString(parts.join("/"));
+	} catch (e) {
+		// $blocks/$block.router.name as a fallback for older mods
+		return readString(path);
+	}
+};
+
 const rtfm = {
 	buildPage: require("rtfm/build"),
 
@@ -36,12 +53,12 @@ const rtfm = {
 
 	addPage(name, page, section) {
 		// Default section is the manual index
-		section = section || rtfm;
+		section = rtfm.getPage(section || rtfm);
 		var path = section.path + "/" + name;
 
 		/* addPage(String) */
 		if (page == null) {
-			page = readString(path)
+			page = readTranslated(path)
 				.replace(/\t/g, "    ").split("\n");
 		}
 
@@ -63,11 +80,11 @@ const rtfm = {
 			page.title = rtfm.getTitle;
 		}
 
-		// Use $bundlename for page keys
+		/* Use $bundlename for page keys,
+		   $bundlename for a page with a translated title,
+		   <$bundlename> for translated pages */
 		section.pages[name] = page;
-		if (name[0] == '$') {
-			name = Core.bundle.get(name.substr(1));
-		}
+		name = translate(name);
 
 		page.table = null;
 		page.scroll = 0;
@@ -126,21 +143,26 @@ const rtfm = {
 		table.add(error + "").grow().center().top().get().wrap = true;
 	},
 
-	showPage(page, temporary) {
-		if (typeof(page) == "string") {
-			const parts = page.split("/");
-			page = rtfm;
-			for (var part of parts) {
-				var section = page;
-				page = section.pages[part];
-				if (!page) {
-					throw "Unknown page '" + part + "' in " + section.path +
-						", valid pages are " + Object.keys(section.pages).join(", ");
-				}
+	// "egg/block" -> rtfm.pages.egg.block
+	getPage(path) {
+		if (typeof(path) != "string") return path;
+
+		const parts = path.split("/");
+		var page = rtfm;
+		for (var part of parts) {
+			var section = page;
+			page = section.pages[part];
+			if (!page) {
+				throw "Unknown page '" + part + "' in " + section.path +
+					", valid pages are " + Object.keys(section.pages).join(", ");
 			}
 		}
 
-		rtfm.dialog.view(page, temporary);
+		return page;
+	},
+
+	showPage(page, temporary) {
+		rtfm.dialog.view(rtfm.getPage(page), temporary);
 		rtfm.dialog.show();
 	},
 
