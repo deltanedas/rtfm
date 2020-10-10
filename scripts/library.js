@@ -99,6 +99,13 @@ const rtfm = {
 			scroll: 0
 		}, parent);
 
+		// They're all files
+		if (Array.isArray(pages)) {
+			for (var name of pages) {
+				rtfm.readPage(name, null, section);
+			}
+		}
+
 		for (var pname in pages) {
 			var child = pages[pname];
 			if (child == null) {

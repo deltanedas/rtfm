@@ -18,16 +18,16 @@
 const rtfm = require("rtfm/library");
 
 /* Documentation for the library */
-rtfm.addSection("$rtfm.docs.title", {
-	"$rtfm.docs.getting-started": null,
-	"$rtfm.docs.api": null,
-	"$rtfm.docs.format": null,
-	"$rtfm.docs.colours": null
-});
+rtfm.addSection("$rtfm.docs.title", [
+	"$rtfm.docs.getting-started",
+	"$rtfm.docs.api",
+	"$rtfm.docs.format",
+	"$rtfm.docs.colours"
+]);
 
 /* Documentation for 6.0 stuff */
-rtfm.addSection("$logic", {
-	"$logic.instructions": null,
-	"$logic.blocks": null,
-	"$logic.builtinvars": null
-});
+rtfm.addSection("$logic", [
+	"$logic.instructions",
+	"$logic.blocks",
+	"$logic.builtinvars"
+]);
