@@ -218,7 +218,7 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 
 	[violet]flag[] [stat]double[] flag
 		Sets the unit's flag to a number.
-		Read it back with [royal]sensor[] [stat]flag @unit flagVar[].
+		Read it back with [royal]sensor[] [stat]@flag @unit flagVar[].
 		Use to identify certain units.
 
 	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
