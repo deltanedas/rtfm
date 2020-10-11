@@ -237,6 +237,10 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	[violet]within[] [stat]double[] x, y, radius, [stat]boolean[] result
 		Sets result to whether a unit is in the specified circle.
 
+		Here, the [green]circle[] is at [red]x[], [red]y[] and has the specified [blue]radius[].
+		Since the bound [stat]@unit[] is within the circle, [coral]result[] is set to true.
+		{rtfm-ucontrol-within}
+
 [royal]uradar[] [stat]Target[] a, b, c, [stay]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
 	Like [royal]radar[], but on all units in the unit register.
 	Searches until a suitable target is found.
