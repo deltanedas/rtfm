@@ -32,7 +32,7 @@ Translated pages are referred to in code with the bundle key.
 [green]rtfm.pages[["$anuke"][], not [red]rtfm.pages.Anuke[]
 
 You can translate sections in two ways:
--	In The folder only:
+- In The folder only:
 	Section Name/English
 	Section Name/Español
 
