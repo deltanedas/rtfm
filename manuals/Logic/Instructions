@@ -43,6 +43,9 @@ Examples of both:
 {rtfm-instruction-example}
 (In this case the draw instruction has 6 values, [coral]clear[] only uses 3 so only 3 are shown)
 
+# Measurements
+All in-world instructions that take coordinates and/or radii take their units in [stat]tiles[].
+
 # Links
 Blocks linked to the processor can be gotten from
 [royal]getlink[] [royal]block[] [coral]0
@@ -120,9 +123,8 @@ These instructions are used by almost every program.
 		Does not work for things like Walls, Switches, etc.
 
 	[violet]shoot[] [stat]Building[] turret, [stat]double[] x, y, [stat]bool[] shoot
-		Tell the turret to fire at an absolute position in World Units.
+		Tell the turret to fire at an absolute position.
 		If [stat]shoot[] is false it will cease firing.
-		(1 tile = 8 WU)
 
 	[violet]shootp[] [stat]Building[] turrrt, [stat]Healthc[] target, [stat]boolean[] shoot
 		Smart version of [violet]shoot[], gets the predicted position of a block or unit.
@@ -190,7 +192,7 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 		Move to a position on the map.
 
 	[violet]approach[] [stat]double[] x, y, radius
-		Like [violet]move[], but will stop moving if within [coral]radius[] world units of the center.
+		Like [violet]move[], but will stop moving if within [coral]radius[] tiles of the center.
 		Causes units to spread out around a position.
 		{rtfm-ucontrol-approach}
 
@@ -222,9 +224,9 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 		Use to identify certain units.
 
 	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
-		Build a block at a certain position in world units, not tiles.
+		Build a block at a certain position, in tiles.
 		Block is in the form [stat]@[][pink]<id>[].
-		Examples:
+		Examples of blocks:
 			[stat]@router
 			[stat]@routorio-double-router
 			[stat]@cryofluid-mixer
@@ -268,5 +270,5 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 10266.
+This manual page was written for BE 10570.
 Newer versions may differ.
