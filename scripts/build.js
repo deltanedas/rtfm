@@ -48,8 +48,7 @@ const getImage = Pattern.compile("^([\\s\\S]+?)?\\{([\\w\\-]+(?::\\d+)?)\\}([\\s
 const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\d+)$");
 
 const addSection = (table, section, size) => {
-	const text = table.add("[stat]" + section).growX().center()
-		.wrap().padTop(16).get();
+	const text = table.add("[stat]" + section).growX().center().padTop(16).get();
 	text.alignment = Align.center;
 	const textwidth = text.prefWidth;
 
