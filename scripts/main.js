@@ -73,7 +73,7 @@ const setup = () => {
 				search.field("", text => {
 					rebuild(text.toLowerCase());
 				}).growX();
-			})).fillX().padBottom(4);
+			})).width(400).fillX().padBottom(4);
 			t.row();
 
 			const pane = t.pane(pages => {
@@ -106,7 +106,7 @@ const setup = () => {
 					func(pagenames.sort());
 				};
 				rebuild();
-			}).top().margin(20).padBottom(8).get();
+			}).width(400).growY().top().margin(20).padBottom(8).get();
 
 			this.initScroll(pane, section);
 		},
@@ -130,11 +130,10 @@ const setup = () => {
 		initScroll(pane, page) {
 			this.pagePane = pane;
 
+			// Load last position
+			pane.scrollYForce = page.scroll;
 			Core.app.post(() => {
 				Core.scene.setScrollFocus(pane);
-
-				// Load last position
-				pane.scrollYForce = page.scroll;
 			});
 		}
 	});

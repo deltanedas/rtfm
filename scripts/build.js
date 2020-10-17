@@ -8,11 +8,11 @@
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program.	If not, see <https://www.gnu.org/licenses/>.
+	along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
 /* Build a page's dialog from page.content, a small subset of markdown */
@@ -44,11 +44,12 @@ const getSection = line => {
 	};
 };
 
-const getImage = Pattern.compile("^([\s\S]+?)?\\{([\\w-]+(?::\\d+)?)\\}([\s\S]*)$");
-const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\s+)$");
+const getImage = Pattern.compile("^([\\s\\S]+?)?\\{([\\w\\-]+(?::\\d+)?)\\}([\\s\\S]*)$");
+const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\d+)$");
 
 const addSection = (table, section, size) => {
-	const text = table.add("[stat]" + section).growX().center().padTop(16).get();
+	const text = table.add("[stat]" + section).growX().center()
+		.wrap().padTop(16).get();
 	text.alignment = Align.center;
 	const textwidth = text.prefWidth;
 
@@ -71,11 +72,12 @@ const addImage = (table, str) => {
 		.height(size).width(size * (region.width / region.height));
 	if (centered) {
 		img.center();
+	} else {
+		img.left();
 	}
 };
 
 module.exports = page => {
-Core.app.post(() => {
 	const table = page.table;
 	table.defaults().left();
 	table.row();
@@ -92,7 +94,7 @@ Core.app.post(() => {
 
 		centered = false;
 		var textfunc = cell => {
-			cell.get().wrap = true;
+			cell.growX().wrap();
 			if (centered) {
 				cell.center();
 				cell.get().alignment = Align.center;
@@ -130,6 +132,7 @@ Core.app.post(() => {
 			var before = image.group(1);
 			var img = image.group(2);
 			var after = image.group(3);
+
 			if (before) {
 				textfunc(table.add(before));
 			}
@@ -142,5 +145,4 @@ Core.app.post(() => {
 			textfunc(table.add(line));
 		}
 	}
-});
 };
