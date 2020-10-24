@@ -7,7 +7,7 @@ Acts like a 5.0 message block otherwise.
 ## Switch
 Toggles output when clicked.
 Read with [stat]sensor[] on [coral]@enabled[].
-Cannot be written to with [stat]control[].
+Can be written to with [stat]control[] to act as a factorio-style pixel if you don't like displays.
 
 ## Micro Processor
 This block runs the logic assembly code.

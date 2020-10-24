@@ -119,8 +119,8 @@ These instructions are used by almost every program.
 
 [royal]control
 	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
-		Enable a block like a conveyor.
-		Does not work for things like Walls, Switches, etc.
+		Enable a block like a conveyor, switch, door, etc.
+		Doesn't work for things like walls, cores, etc.
 
 	[violet]shoot[] [stat]Building[] turret, [stat]double[] x, y, [stat]bool[] shoot
 		Tell the turret to fire at an absolute position.
