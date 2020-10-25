@@ -15,7 +15,7 @@ It has connection [coral]Building[]s which are in const variables [ammo]@<index>
  this variable is shown when selecting the processor.
 It can connect to any block in a 10 tile radius.
 With regards to instructions:
-	- Holds 2000 instructions. (temporary)
+	- Holds 1000 instructions max, with the code being at most 32767 characters.
 	- Runs 2 instructions every tick.
 
 ## Logic Processor
