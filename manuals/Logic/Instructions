@@ -194,7 +194,7 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	[violet]approach[] [stat]double[] x, y, radius
 		Like [violet]move[], but will stop moving if within [coral]radius[] tiles of the center.
 		Causes units to spread out around a position.
-		{rtfm-ucontrol-approach}
+{rtfm-ucontrol-approach}
 
 	[violet]boost[] [stat]boolean[] enable
 		Enable or disable boosting for mechs.
@@ -231,17 +231,17 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 			[stat]@routorio-double-router
 			[stat]@cryofluid-mixer
 
-	[violet]getBlock[] [stat]double[] x, y, [stat]Block[] result
-		Get the [stat]Block[] at a position.
+	[violet]getBlock[] [stat]double[] x, y, [stat]Block[] type, [stat]Building[] building
+		Get the [stat]Building[] at a position and put it in [coral]building[], its [stat]Block[] type in [coral]type[].
 		Can be used with [violet]build[].
-		Cannot be printed, it will serialize as "[[content]".
+		When [coral]type[] is printed, it will serialize as just the block's name.
 
 	[violet]within[] [stat]double[] x, y, radius, [stat]boolean[] result
 		Sets result to whether a unit is in the specified circle.
 
 		Here, the [green]circle[] is at [red]x[], [red]y[] and has the specified [blue]radius[].
 		Since the bound [stat]@unit[] is within the circle, [coral]result[] is set to true.
-		{rtfm-ucontrol-within}
+{rtfm-ucontrol-within}
 
 [royal]uradar[] [stat]Target[] a, b, c, [stay]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
 	Like [royal]radar[], but on all units in the unit register.
@@ -250,17 +250,19 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 [royal]ulocate
 	Uses units to find a block type.
 	Meant to be used to find blocks that are out of range for the unit.
-	[coral]Found[] is only set to true if [coral]outX[] and [coral]outY[] point to the desired block.
+	[coral]outFound[] is only set to true if [coral]outX[] and [coral]outY[] point to the desired block.
 
-	[violet]ore[] [stat]Item[] ore, [stat]double[] outX, outY, [stat]boolean[] found
+	[violet]ore[] [stat]Item[] ore, [stat]double[] outX, outY, [stat]boolean[] outFound
 		Looks for an ore with an itemDrop of [coral]ore[].
 		Use [stat]@sand[] to find sand/dark sand, [stat]@copper[] to find copper, etc.
 
-	[violet]building[] [stat]BlockFlag[] type, [stat]boolean[] enemy, [stat]double[] outX, outY, [stat]boolean[] found
+	[violet]building[] [stat]BlockFlag[] type, [stat]boolean[] enemy, [stat]double[] outX, outY, [stat]boolean[] outFound, [stat]Building[] outBuilding
 		Looks for a building with certain pathfinder block flags.
 		If [coral]enemy[] is true, derelict blocks cannot be located.
+		If [coral]outFound[] is set to true and the block is on the processor's team, [coral]outBuilding[] is set to the block found.
+		If you do operations that need [coral]outBuilding[], ignore [coral]outFound[] as it may not always be defined.
 
-	[violet]spawn[] [stat]double[] outX, outY, [stat]boolean[] found
+	[violet]spawn[] [stat]double[] outX, outY, [stat]boolean[] outFound
 		Find an enemy spawn.
 
 [royal]noop
@@ -270,5 +272,5 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 10570.
+This manual page was written for BE 10779.
 Newer versions may differ.

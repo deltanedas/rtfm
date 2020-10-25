@@ -96,10 +96,10 @@ These can be set for certain functionality.
 	This represents the line to read the next instruction from.
 	You can set this to jump to another line.
 	Example for call and ret (lines that start with # are comments):
-		# Save where we will leave off after the jump, by setting a variable retaddr to @counter + 1.
+		[purple]# Save where we will leave off after the jump, by setting a variable retaddr to @counter + 1.
 		[stat]op[] [pink]add[] [royal]retaddr @counter[] [coral]1
-		# Set @counter to the line number of a function called "coolfunc", effectively calling it. The processor will jump to that line next.
+		[purple]# Set @counter to the line number of a function called "coolfunc", effectively calling it. The processor will jump to that line next.
 		[stat]set[] [royal]@counter .coolfunc
 		...
-		# In coolfunc, return to the line right after where we called the code from and continue processing instructions from there.
+		[purple]# In coolfunc, return to the line right after where we called the code from and continue processing instructions from there.
 		[stat]set[] [royal]@counter retaddr
