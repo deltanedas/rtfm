@@ -49,9 +49,13 @@ const setup = () => {
 
 			// Add on the default close button
 			if (temporary || page == rtfm) {
+try {
 				this.buttons.cells.peek().get().clicked(() => {
 					page.scroll = this.pagePane.scrollY;
 				});
+} catch (e) {
+	Log.warn("uh oh it die: " + e + " / " + e.fileName + ":" + e.lineNumber);
+}
 			}
 
 			this.cont.clear();
