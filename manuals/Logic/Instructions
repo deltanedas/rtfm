@@ -16,6 +16,7 @@ Type may be:
 	Target: Trait to filter a unit or block by
 	Op: Mathematical operation, unary or binary
 	etc.
+Types not specified here usually refer to the class name.
 
 # Colours
 The following colours have special meaning:
@@ -48,9 +49,9 @@ All in-world instructions that take coordinates and/or radii take their units in
 
 # Links
 Blocks linked to the processor can be gotten from
-[royal]getlink[] [royal]block[] [coral]0
+[royal]getlink[] [royal]block[] [coral]0[]
 or
-[royal]<blockname>1
+[royal]<blocksuffix>1[]
 Where the latter is like Lua, it is 1-indexed.
 Linked blocks show their associated variable when the processor is selected.
 
@@ -68,7 +69,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 	Does nothing on blocks other than memory cells.
 
 
-[royal]draw
+[royal]draw[]
 	These sub-instructions queue operations that are run with [royal]drawflush[].
 
 	[violet]clear[] [stat]int[] r, g, b
@@ -78,7 +79,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 		Sets the colour for future operations.
 
 	[violet]stroke[] [stat]int[] width
-		Sets line width for future [violet]*line[] operations
+		Sets line width for future [violet]*line[] operations.
 
 	[violet]line[] [stat]int[] x1, y1, x2, y2
 		Draw a line from one point to another.
@@ -98,7 +99,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 
 	[violet]triangle[] [stat]int[] x1, y1, x2, y2, x3, y3
 		Draw a triangle with 3 points.
-		Has no [violet]line equivalent.
+		Has no [violet]line[] equivalent.
 
 	[violet]image[] [stat]int[] x, y, [stat]UnlockableContent[] image, [stat]double[] size, rotation
 		Draws [coral]image[][green].icon(Cicon.medium)[] centered on the position.
@@ -113,7 +114,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 	Add [stat]text[] to the processor's print buffer.
 	UnlockableContent is serialized by getting its [stat]name[] field, e.g. [stat]routorio-solar-router[].
 	Building does the same but for its [stat]block.name[].
-	Uni does the same but for its [stat]type.name[].
+	Unit does the same but for its [stat]type.name[].
 
 [royal]printflush[] [stat]Building[] msgblock
 	Set [stat]msgblock[]'s text to the processor's print buffer.
@@ -124,9 +125,9 @@ These instructions are used by almost every program.
 [royal]getlink[] [stat]Var[] store, [stat]int[] index
 	Gets linked tile #[coral]index[] and puts it in [coral]store[].
 	Can be used for things like iterating over all linked blocks.
-	Can be iterated over C string style or array style with [royal]@links[].
+	Can be iterated over null-termination (C string) style or for-loop style with [royal]@links[].
 
-[royal]control
+[royal]control[]
 	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
 		Enable a block like a conveyor, switch, door, etc.
 		Doesn't work for things like walls, cores, etc.
@@ -154,13 +155,13 @@ These instructions are used by almost every program.
 [royal]sensor[] [stat]Val[] store, [stat]Sensable[] sense, [stat]Building[] block
 	Extract information [stat]sense[] from [stat]block[], saved to [stat]store[].
 	For example, to get the amount of graphite in a block:
-		[royal]sensor[] [stat] graphcount @graphite block
+		[royal]sensor[] [stat]graphcount @graphite block[]
 	Use the number in [stat]graphcount[] afterwards.
 
 [royal]set[] [stat]Val[] varname, [stat]Val[] value
 	Set a variable with name [stat]varname[] to [stat]value[].
 	For example, to copy [stat]@this[] into [stat]block[]:
-		[royal]set[] [stat]block @this
+		[royal]set[] [stat]block @this[]
 
 [royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[b]
 	Set [stat]result[] to the output of a mathematical operation.
@@ -168,7 +169,7 @@ These instructions are used by almost every program.
 
 # Control flow
 
-[royal]end
+[royal]end[]
 	Shorthand for [royal]jump[] [coral]0 always[].
 
 [royal]jump[] [coral]int[] inst, [stat]Comp[] comp, [stat]Val[] a, b
@@ -178,23 +179,24 @@ These instructions are used by almost every program.
 
 # Units
 These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
+This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 [royal]ubind[] [stat]UnitType[] type
 	Loads the next cached unit of a certain [coral]type[] into [stat]@unit[].
 	It will loop over them round-robin style.
 	Other unit instructions use the unit in [stat]@unit[].
 	Won't work across teams.
-	[coral]Currently has no range limit.
+	[coral]Currently has no range limit.[]
 
 	Examples of unit types:
 		[stat]@mono
-		[stat]@routorio-sexy-router
-		[stat]@poly
+		@routorio-sexy-router
+		@poly[]
 
-[royal]ucontrol
+[royal]ucontrol[]
 	Act on [stat]@unit[].
 
-	[violet]stop
+	[violet]stop[]
 		Stop moving, i.e. move to the current position.
 
 	[violet]move[] [stat]double[] x, y
@@ -203,12 +205,12 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	[violet]approach[] [stat]double[] x, y, radius
 		Like [violet]move[], but will stop moving if within [coral]radius[] tiles of the center.
 		Causes units to spread out around a position.
-{rtfm-ucontrol-approach}
+		{rtfm-ucontrol-approach}
 
 	[violet]boost[] [stat]boolean[] enable
 		Enable or disable boosting for mechs.
 
-	[violet]pathfind
+	[violet]pathfind[]
 		Make the unit follow standard AI; find enemy cores, guard spawns, obey command centers.
 
 	[violet]target[] [stat]double[] x, y, [stat]boolean[] shoot
@@ -223,40 +225,48 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	[violet]itemTake[] [stat]Building[] from, [stat]Item[] item, [stat]int[] amount
 		Takes at most [coral]amount[] of an item from a building.
 
-	[violet]mine[] [stat]double[]x, y
+	[violet]payDrop[]
+		Drops the current payload, if there's room (for blocks).
+
+	[violet]payTake[] [stat]boolean[] takeUnits
+		Picks up a block, or unit [coral](^)[, if there's one underneath the unit.
+		Only works for units like Mega and Oct that can carry payloads.
+
+	[violet]mine[] [stat]double[] x, y
 		Mine the ore at the position.
-		Does nothing if it's not minable.
+		Does nothing if it's not minable or already being mined.
 
 	[violet]flag[] [stat]double[] flag
 		Sets the unit's flag to a number.
-		Read it back with [royal]sensor[] [stat]@flag @unit flagVar[].
+		Read it back with [royal]sensor[] [stat]flagVar @unit @flag[].
 		Use to identify certain units.
 
-	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation
+	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation, [stat]Var[] config
 		Build a block at a certain position, in tiles.
 		Block is in the form [stat]@[][pink]<id>[].
+		Config is currently limited to items with Sorter, Unloader and * Sources
 		Examples of blocks:
 			[stat]@router
-			[stat]@routorio-double-router
-			[stat]@cryofluid-mixer
+			@routorio-double-router
+			@cryofluid-mixer[]
 
 	[violet]getBlock[] [stat]double[] x, y, [stat]Block[] type, [stat]Building[] building
 		Get the [stat]Building[] at a position and put it in [coral]building[], its [stat]Block[] type in [coral]type[].
-		Can be used with [violet]build[].
-		When [coral]type[] is printed, it will serialize as just the block's name.
+		[coral]Type[] can be used with [violet]build[].
+		When [coral]type[] or [coral]building[] is printed, it will serialize as just the block's name.
 
 	[violet]within[] [stat]double[] x, y, radius, [stat]boolean[] result
 		Sets result to whether a unit is in the specified circle.
 
 		Here, the [green]circle[] is at [red]x[], [red]y[] and has the specified [blue]radius[].
 		Since the bound [stat]@unit[] is within the circle, [coral]result[] is set to true.
-{rtfm-ucontrol-within}
+		{rtfm-ucontrol-within}
 
-[royal]uradar[] [stat]Target[] a, b, c, [stay]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
+[royal]uradar[] [stat]Target[] a, b, c, [stat]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
 	Like [royal]radar[], but on all units in the unit register.
 	Searches until a suitable target is found.
 
-[royal]ulocate
+[royal]ulocate[]
 	Uses units to find a block type.
 	Meant to be used to find blocks that are out of range for the unit.
 	[coral]outFound[] is only set to true if [coral]outX[] and [coral]outY[] point to the desired block.
@@ -269,12 +279,12 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 		Looks for a building with certain pathfinder block flags.
 		If [coral]enemy[] is true, derelict blocks cannot be located.
 		If [coral]outFound[] is set to true and the block is on the processor's team, [coral]outBuilding[] is set to the block found.
-		If you do operations that need [coral]outBuilding[], ignore [coral]outFound[] as it may not always be defined.
+		[stat]If you do operations that need [coral]outBuilding[], ignore [coral]outFound[] as it may not always be defined.[]
 
 	[violet]spawn[] [stat]double[] outX, outY, [stat]boolean[] outFound
 		Find an enemy spawn.
 
-[royal]noop
+[royal]noop[]
 	Does absolutely nothing.
 	Use to sleep for a cycle, each processor supports more cycles per tick.
 	Fallback instruction if parsing fails.

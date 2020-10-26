@@ -33,7 +33,24 @@ const readTranslated = path => {
 };
 
 const rtfm = {
-	buildPage: require("rtfm/build"),
+	buildPage: require("rtfm/builder"),
+	buildLegacyPage: require("rtfm/legacy-builder"),
+
+	isLegacy(page) {
+		// Read from a file or is a section, can't have anything special
+		if (!Array.isArray(page.content)) {
+			return false;
+		}
+
+		for (var line of page.content) {
+			// If not a string (func/element), it can't be nicely parsed
+			if (typeof(line) != "string") {
+				return true;
+			}
+		}
+
+		return false;
+	},
 
 	addButton(table, page) {
 		const title = (page.pages ? "[stat]" : "") + page.name;
@@ -59,11 +76,11 @@ const rtfm = {
 		/* addPage(String) */
 		if (page == null) {
 			page = readTranslated(path)
-				.replace(/\t/g, "    ").split("\n");
+				.replace(/\t/g, "    ");
 		}
 
-		/* addPage(String, String[]) */
-		if (Array.isArray(page)) {
+		/* addPage(String, Object[]/String) */
+		if (Array.isArray(page) || typeof(page) == "string") {
 			page = {content: page};
 		}
 
@@ -72,8 +89,12 @@ const rtfm = {
 			page.button = rtfm.addButton;
 		}
 
+		if (!page.isLegacy) {
+			page.isLegacy = rtfm.isLegacy;
+		}
+
 		if (!page.build) {
-			page.build = rtfm.buildPage;
+			page.build = page.isLegacy(page) ? rtfm.buildLegacyPage : rtfm.buildPage;
 		}
 
 		if (!page.title) {
@@ -170,13 +191,13 @@ const rtfm = {
 		rtfm.dialog.show();
 	},
 
-	// Page light implementation
+	currentPage: null,
+	dialog: null,
+
+	/* Light Page implementation */
 	pages: {},
 	scroll: 0,
-	path: "manuals",
-
-	currentPage: null,
-	dialog: null
+	path: "manuals"
 };
 
 module.exports = rtfm;

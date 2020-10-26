@@ -15,7 +15,9 @@
 	along with this program. If not, see <https://www.gnu.org/licenses/>.
 */
 
-/* Build a page's dialog from page.content, a small subset of markdown */
+/* Build a page's dialog from page.content, a small markup language
+   This is the legacy builder, it is pretty slow and generates a laggy page
+   HOWEVER it allows custom elements and is therefore more flexible */
 
 const Pattern = java.util.regex.Pattern;
 

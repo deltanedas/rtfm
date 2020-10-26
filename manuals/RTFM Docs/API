@@ -1,63 +1,68 @@
 # Functions
-[stat]addPage(String name, Page page)
+[stat]addPage(String name, Page page, Page section = [coral]rtfm[])[]
 	Add a page to [stat]rtfm.pages[].
 	[sky]page[] may be a [stat]Page[] or the page's content as an array of lines, for simplicity.
 	If page isn't set, the content is read from [green]manuals/<name>[].
 	See [stat]Page[] definition.
 
-[stat]buildPage(Page page)
+[stat]buildPage(Page page)[]
 	Parses the manual page lines in [sky]page.content[] and adds the results to [sky]page.title[].
-	Default function for [stat]Page.build[stat].
+	Default function for [stat]Page.build[].
 	See the [red]Format[] page for more info.
 
-[stat]addButton(Table parent, Page page)
+[stat]buildLegacyPage(Page page)[]
+	Like above but for legacy pages.
+	Uses the old and very inefficient page builder.
+	You should only use this with custom elements.
+
+[stat]addButton(Table parent, Page page)[]
 	Adds a button to the table that when clicked runs [stat]rtfm.showPage[].
 	Default for [stat]Page.button[].
 
-[stat]getTitle(Page page)
+[stat]getTitle(Page page)[]
 	Returns the full "path" of a page.
 	If it is not in a section, the name is returned.
 	If it is, the section's title and the page's name is returned.
 	Default for [stat]Page.title[].
 
-[stat]showPage(Page name, boolean temporary = false)
+[stat]showPage(Page name, boolean temporary = false)[]
 	Show a manual page.
 	Name may be a String, for [stat]rtfm.pages[].
 	If [sky]temporary[] is true, back will just close the dialog and the current page will not be changed.
 	Called by [stat]rtfm.addButton[].
 
-[stat]showManual()
+[stat]showManual()[]
 	Show [stat]rtfm.dialog[], with the current page.
 
 # Fields
-[stat]Page currentPage[] = [coral]null
+[stat]Page currentPage[] = [coral]null[]
 	The page or section currently being viewed.
 
-[stat]Object<String name, Page page> pages
+[stat]Object<String name, Page page>[] pages
 	Map of names to root pages.
 
-[stat]ManualDialog dialog[] extends [royal]BaseDialog
+[stat]ManualDialog dialog[] extends [royal]BaseDialog[]
 	The manual page dialog.
 	Has a function [stat]view(Page page)[] which adjusts the dialog for the page or section.
 
-# [stat]Page[] definition
-	[royal]function(Page page)[] build = [coral]rtfm.buildPage
+# Page definition
+	[royal]function(Page page)[] build = [coral]rtfm.buildPage[]
 		Function that fills [sky]page.table[].
-	[royal]function(Table parent, Page page)[] button = [stat]rtfm.addButton
+	[royal]function(Table parent, Page page)[] button = [stat]rtfm.addButton[]
 		Function that adds the page's opening button.
-	[royal]function(Page page)[] title = [stat]rtfm.getTitle
+	[royal]function(Page page)[] title = [stat]rtfm.getTitle[]
 		Returns the title shown at the top of the manual page.
 
-	[royal]String[[][] content
-		Raw page lines, not needed for a custom [sky]build[] function.
-		You can use Arc elements instead of strings.
-$rtfm.docs.bundle-line
-	[royal]Table[] table = [coral]null
+	[royal]String/String[[][] content
+		Raw page text, not needed for a custom [sky]build[] function.
+		If [coral]null[], content is read from a file.
+		You can use Arc elements instead of strings, but only with the legacy builder.
+	[royal]Table[] table = [coral]null[]
 		Built table, shown when the button is clicked.
-	[royal]Page[] section = [coral]rtfm
+	[royal]Page[] section = [coral]rtfm[]
 		Parent section of this page, or [stat]rtfm[] if a root page.
-	[stat]Object<String name, Page page> pages = [coral]undefined
-		Map of names to child pages, undefined for normal pages.
-	[royal]float[] scroll = [coral]0
+	[royal]Object<String name, Page page>[] pages = [coral]undefined[]
+		Map of names to child pages, not defined for normal pages.
+	[royal]float[] scroll = [coral]0[]
 		Last scrollbar Y position.
-		You shouldn't ever need this.
+		You shouldn't ever need to use this.
