@@ -67,6 +67,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 	Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
 	Does nothing on blocks other than memory cells.
 
+
 [royal]draw
 	These sub-instructions queue operations that are run with [royal]drawflush[].
 
@@ -99,12 +100,20 @@ These instructions are for memory cells, displays and message blocks respectivel
 		Draw a triangle with 3 points.
 		Has no [violet]line equivalent.
 
+	[violet]image[] [stat]int[] x, y, [stat]UnlockableContent[] image, [stat]double[] size, rotation
+		Draws [coral]image[][green].icon(Cicon.medium)[] centered on the position.
+		You can use any subclass of UC, e.g. Item, UnitType, Block, etc.
+
 [royal]drawflush[] [stat]Building[] display
 	Flush all pending [royal]draw[] operations to a display.
 	They are drawn on the next tick.
 
+
 [royal]print[] [stat]String[] text
 	Add [stat]text[] to the processor's print buffer.
+	UnlockableContent is serialized by getting its [stat]name[] field, e.g. [stat]routorio-solar-router[].
+	Building does the same but for its [stat]block.name[].
+	Uni does the same but for its [stat]type.name[].
 
 [royal]printflush[] [stat]Building[] msgblock
 	Set [stat]msgblock[]'s text to the processor's print buffer.
@@ -115,7 +124,7 @@ These instructions are used by almost every program.
 [royal]getlink[] [stat]Var[] store, [stat]int[] index
 	Gets linked tile #[coral]index[] and puts it in [coral]store[].
 	Can be used for things like iterating over all linked blocks.
-		Can be iterated over C string style or array style with [royal]@links[].
+	Can be iterated over C string style or array style with [royal]@links[].
 
 [royal]control
 	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
@@ -272,5 +281,5 @@ These instructions work on the [stat]@unit[] register, rather than parameters li
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 10779.
+This manual page was written for BE 10830.
 Newer versions may differ.
