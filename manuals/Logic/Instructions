@@ -229,7 +229,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 		Drops the current payload, if there's room (for blocks).
 
 	[violet]payTake[] [stat]boolean[] takeUnits
-		Picks up a block, or unit [coral](^)[, if there's one underneath the unit.
+		Picks up a block, or unit [coral](^)[], if there's one underneath the unit.
 		Only works for units like Mega and Oct that can carry payloads.
 
 	[violet]mine[] [stat]double[] x, y
