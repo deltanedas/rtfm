@@ -21,12 +21,11 @@
 
 // TODO: use a stack for content indices stuff, rewrite logic?
 // TODO: use a table for headings to allow images and stuff
-// TODO: inline javascript replacement
 // TODO: do something to make inline images not fuck everything up
 
 const Pattern = java.util.regex.Pattern;
 
-var startLine, startImage, textStart, heading, headingStart, centered;
+var startLine, startImage, scriptStart, brackets, textStart, heading, headingStart, centered;
 
 const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\d+)$");
 
@@ -85,11 +84,14 @@ Core.app.post(() => {
 		"I am an {image:64",
 		"} that has been run on", "",
 
-		"# bad trailing heading"
+		"$('# bad trailing heading')",
+		"$(table.add('gnu'); return null)"
 	]);
 });
 
 module.exports = page => {
+	Time.mark()
+	var i;
 	const table = page.table;
 	table.defaults().left();
 	table.row();
@@ -103,6 +105,7 @@ module.exports = page => {
 
 	startLine = true;
 	startImage = null;
+	scriptStart = null; brackets = 0;
 	textStart = 0;
 	heading = 0;
 	headingStart = null;
@@ -119,7 +122,7 @@ module.exports = page => {
 	};
 
 	const endString = i => {
-		const text = page.content.substr(textStart, i - textStart);
+		const text = page.content.slice(textStart, i);
 		if (text.charAt(0) == '\n') table.row();
 		textfunc(table.add(text));
 		// Don't mess up images
@@ -131,10 +134,24 @@ module.exports = page => {
 	};
 
 	const endHeading = i => {
-		addHeading(table, page.content.substr(headingStart, i - headingStart));
+		addHeading(table, page.content.slice(headingStart, i));
 		heading = 0;
 		headingStart = null;
 		textStart = i + 1;
+	};
+
+	const endScript = () => {
+		const script = page.content.slice(scriptStart, i).replace(/\n/g, " ");
+		var ret;
+		eval("ret = (() => {" + (script.includes("return") ? script : "return " + script)+ "})()");
+
+		ret = ret == null ? "" : ret;
+
+		page.content = page.content.slice(0, scriptStart - 2) + ret + page.content.slice(i + 1, page.content.length);
+		// Go back to before $(script)
+		i -= script.length + 3;
+
+		scriptStart = null;
 	};
 
 	const flush = i => {
@@ -148,8 +165,25 @@ module.exports = page => {
 		}
 	};
 
-	for (var i = 0; i < page.content.length; i++) {
-		var char = page.content.charAt(i);
+	for (i = 0; i < page.content.length; i++) {
+		var char = page.content[i];
+		/* Inline scripts - parsed first as to preserve line starts and what not */
+		if (scriptStart == null) {
+			if (char == '$' && page.content[i + 1] == '(') {
+				scriptStart = i + 2;
+				i++;
+				brackets = 0;
+				continue;
+			}
+		} else {
+			if (char == '(') {
+				brackets++;
+			} else if(char == ')' && brackets-- == 0) {
+				endScript();
+			}
+			continue;
+		}
+
 		if (char == '\n') {
 			if (centered) {
 				endString(i);
@@ -172,15 +206,14 @@ module.exports = page => {
 
 				heading++;
 				headingStart = i + 1;
-				// allow capturing more '#'s to increase bar thickness
+				// allow capturing more '#'s to increase bar thickness and text size
 				startLine = true;
-				continue;
 			} else if (char == '~' && heading == 0) {
 				flush(i);
 				centered = true;
 				textStart = i + 1;
-				continue;
 			}
+			continue;
 		}
 
 		/* Images */
@@ -189,7 +222,7 @@ module.exports = page => {
 			continue;
 		}
 		if (char == '}' && startImage != null) {
-			const img = page.content.substr(startImage, i - startImage);
+			const img = page.content.slice(startImage, i);
 			// Check for symbols that arent expected - this is how you escape images
 			if (img.match(/[^\w:\d-]/)) continue;
 
@@ -197,10 +230,10 @@ module.exports = page => {
 			addImage(table, img);
 			textStart = i + 1;
 			startImage = null;
+			continue;
 		}
-
-		// TODO: js replacement
 	}
 
 	flush(i);
+	print("Building page '" + page.name + "' took " + Time.elapsed());
 };

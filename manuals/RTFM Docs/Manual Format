@@ -15,6 +15,22 @@ If you ever need to escape a set of {[red][]curly brackets}, add symbols that ar
 Example:
 	{rtfm-image-example}
 
+# Inline scripts
+Inline scripts are created with [green]$[green]("my\n#text\n{[]here}")[].
+You may omit [green]return[] for a simple one-statement script.
+The return value, if any, replaces the page's content and is parsed with it.
+Acts like <? echo("ret") ?> in PHP.
+You can manipulate the Table [coral]table[] if you want to add custom elements.
+They can be escaped with colours like with images.
+[red]Currently the parser will stop at the first unbalanced [green])[] it finds, you cannot include these in strings, use the escape sequence [green]\x29[] instead.[]
+$("Example 1:")
+	$[red][]("Example 1:")
+Example 2:
+	$[red][](const arr = [1, 2, 3]; return "#" + arr.join("\t\n"))
+	$(const arr = [1, 2, 3]; return "#" + arr.join("\t\n"))
+
+[stat]A challenge: try to make a manpage that infinitely parses itself.[]
+
 # Text
 Unformatted text is simply added as labels to the page's table.
 You can use colours as usual with [coral][[][].

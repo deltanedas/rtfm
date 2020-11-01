@@ -13,21 +13,25 @@ Can be written to with [royal]control[] to act as a factorio-style pixel if you 
 This block runs the logic assembly code.
 It has connection [coral]Building[]s which are in const variables [pink]<blocksuffix><index>[],
  this variable is shown when selecting the processor.
-It can connect to any block in a 10 tile radius.
+It can connect to any block in a $(Blocks.microProcessor.range / Vars.tilesize) tile radius.
 With regards to instructions:
-	- Holds 1000 instructions max, with the code being at most 32767 characters.
-	- Runs 2 instructions every tick.
+	- Holds $(LExecutor.maxInstructions) instructions max, with the code being at most $(Math.pow(2, 15) - 1) characters.
+	- Runs $(Blocks.microProcessor.instructionsPerTick) instructions every tick.
 
 # Logic Processor
 Like a [royal]Micro Processor[], with some modifications:
-	- Range is doubled to 20 tiles.
-	- 8 instructions are ran per tick, 4x faster.
+	- Range is increased to $(Blocks.logicProcessor.range / Vars.tilesize) tiles.
+	- $(Blocks.logicProcessor.instructionsPerTick) instructions are ran per tick, $(
+		Blocks.logicProcessor.instructionsPerTick
+		/ Blocks.microProcessor.instructionsPerTick)x faster.
 	- 2x2 instead of a 1x1
 
 # Hyper Processor
 Above except:
-	- Range is 43 blocks
-	- 25 instructions per tick, 12.5x faster than a micro processor.
+	- Range is $(Blocks.hyperProcessor.range / Vars.tilesize) blocks
+	- $(Blocks.hyperProcessor.instructionsPerTick) instructions per tick, $(
+		Blocks.hyperProcessor.instructionsPerTick
+		/ Blocks.microProcessor.instructionsPerTick)x faster than a micro processor.
 	- Requires cryofluid to process instructions
 	- 3x3 instead of 2x2
 This outranges a ripple, use them as radars.
