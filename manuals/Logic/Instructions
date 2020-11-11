@@ -195,6 +195,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 [royal]ucontrol[]
 	Act on [stat]@unit[].
+	Subinstructions that take positions (besides [violet]move/[violet]approach[]) [red]will not move the unit[], you must do that yourself.
 
 	[violet]stop[]
 		Stop moving, i.e. move to the current position.
