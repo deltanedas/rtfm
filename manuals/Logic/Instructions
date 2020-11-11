@@ -181,21 +181,27 @@ These instructions are used by almost every program.
 These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
 This is mainly to prevent controlling enemy units found from [royal]radar[].
 
-[royal]ubind[] [stat]UnitType[] type
-	Loads the next cached unit of a certain [coral]type[] into [stat]@unit[].
-	It will loop over them round-robin style.
-	Other unit instructions use the unit in [stat]@unit[].
-	Won't work across teams.
-	[coral]Currently has no range limit.[]
+[royal]ubind[]
+	[stat]UnitType[] type
+		Loads the next cached unit of a certain [coral]type[] into [stat]@unit[].
+		It will loop over them round-robin style.
+		Other unit instructions use the unit in [stat]@unit[].
+		Won't work across teams.
+		[coral]Has no range limit.[]
 
-	Examples of unit types:
-		[stat]@mono
-		@routorio-sexy-router
-		@poly[]
+		Examples of unit types:
+			[stat]@mono
+			@routorio-sexy-router
+			@poly[]
+
+	[stat]Unit[] unit
+		Binds an existing unit from a variable, e.g. from [royal]radar[].
+		Obviously can't be used on enemy units.
 
 [royal]ucontrol[]
 	Act on [stat]@unit[].
 	Subinstructions that take positions (besides [violet]move/[violet]approach[]) [red]will not move the unit[], you must do that yourself.
+	No-op for player-controlled units.
 
 	[violet]stop[]
 		Stop moving, i.e. move to the current position.
