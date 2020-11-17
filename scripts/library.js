@@ -158,6 +158,11 @@ const rtfm = {
 		// Remove any elements added before the error
 		table.clear();
 
+		// rhino errors are h
+		if (typeof(error) == "object") {
+			error = error + " (" + error.fileName + "#" + error.lineNumber + ")";
+		}
+
 		Log.err("Failed to build page: @", error);
 		table.add("[red]Failed to build page![]").center();
 		table.row();

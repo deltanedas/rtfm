@@ -141,7 +141,11 @@ module.exports = page => {
 	};
 
 	const endScript = () => {
-		const script = page.content.slice(scriptStart, i).replace(/\n/g, " ");
+		const script = page.content.slice(scriptStart, i)
+			// return breaks with newlines
+			.replace(/\n/g, " ")
+			// comments break without newlines
+			.replace(/\/\/.+\n^/g, "");
 		var ret;
 		eval("ret = (() => {" + (script.includes("return") ? script : "return " + script)+ "})()");
 

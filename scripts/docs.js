@@ -31,3 +31,8 @@ rtfm.addSection("$logic", [
 	"$logic.blocks",
 	"$logic.builtinvars"
 ]);
+
+/* Documentation for some modding stuff */
+rtfm.addSection("Modding", [
+	"Units"
+]);
