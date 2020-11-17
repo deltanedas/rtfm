@@ -67,7 +67,7 @@ These instructions are for memory cells, displays and message blocks respectivel
 [royal]read[] [stat]Var[] store, [stat]Building[] cell, [stat]int[] address
 	Reads the [stat]double[] from [coral]address[] of [coral]cell[] into variable [coral]store[].
 	Does nothing on blocks other than memory cells.
-
+	In English, reads the ([coral]address[] + 1)th number from the memory cell.
 
 [royal]draw[]
 	These sub-instructions queue operations that are run with [royal]drawflush[].
@@ -136,9 +136,14 @@ These instructions are used by almost every program.
 		Tell the turret to fire at an absolute position.
 		If [stat]shoot[] is false it will cease firing.
 
-	[violet]shootp[] [stat]Building[] turrrt, [stat]Healthc[] target, [stat]bool[] shoot
+	[violet]shootp[] [stat]Building[] turret, [stat]Healthc[] target, [stat]bool[] shoot
 		Smart version of [violet]shoot[], gets the predicted position of a block or unit.
 		Takes speed and position into account, giving a decent guess as to where the target will be.
+
+	[violet]configure[] [stat]Building[] build. [stat]Content[] config
+		Sets certain blocks' configuration to [coral]config[].
+		Only works with blocks that accept [stat]UnitType[], [stat]Item[] or [stat]Liquid[]s, such as sorters, unloaders, item/liquid, sources,
+		 unit factories, etc.
 
 [royal]radar[] [stat]Building[] turret, [stat]TargetType[] prop1, prop2, prop3, [stat]bool[] order, [stat]Val[] output
 	Radar gets a list of units targetable by a [coral]turret[].
@@ -165,7 +170,14 @@ These instructions are used by almost every program.
 
 [royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[b]
 	Set [stat]result[] to the output of a mathematical operation.
-	if [coral]b[] is not set then it is ignored for a unary operation.
+	If [coral]b[] is not set then it is ignored for a unary operation.
+	Some operations of note:
+		[royal]op[] [violet]rand[] [coral]num 10[]
+			Returns a random double between [0, 10).
+			To get rand(min, max), subtract the min from max to use with rand then add min to the result.
+		[royal]op[] [violet]floor[] [coral]num 1.9999[]
+			Rounds a number [stat]down[] to a whole number, essentially num = num // 1.
+			To round a number to the [stat]nearest[], add 0.5 then floor.
 
 # Control flow
 
@@ -174,8 +186,9 @@ These instructions are used by almost every program.
 
 [royal]jump[] [coral]int[] inst, [stat]Comp[] comp, [stat]Val[] a, b
 	Jumps to [coral]inst[] if [coral]a comp b[] is true.
+	Can be used on its own as an [stat]if[] statement, or with other instructions to form while, for, switch statements, or even functions.
 	The instruction index does not change in the graphical editor.
-	[royal]jump[] [coral]inst always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]inst[].
+	[royal]jump[] [coral]inst[] [violet]always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]inst[].
 
 # Units
 These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
@@ -204,7 +217,8 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 	No-op for player-controlled units.
 
 	[violet]stop[]
-		Stop moving, i.e. move to the current position.
+		Stop all actions, including shooting.
+		To stop and stay shooting, move to the current position with [royal]sensor[]'d @x and @y.
 
 	[violet]move[] [stat]double[] x, y
 		Move to a position on the map.
@@ -247,6 +261,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 		Sets the unit's flag to a number.
 		Read it back with [royal]sensor[] [stat]flagVar @unit @flag[].
 		Use to identify certain units.
+		Seen as the number next to the gear when hovering over a unit.
 
 	[violet]build[] [stat]double[] x, y, [stat]Block[] block, [stat]0 <= int < 4[] rotation, [stat]Var[] config
 		Build a block at a certain position, in tiles.
@@ -277,6 +292,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 	Uses units to find a block type.
 	Meant to be used to find blocks that are out of range for the unit.
 	[coral]outFound[] is only set to true if [coral]outX[] and [coral]outY[] point to the desired block.
+	[red]Cannot locate specific block types, only general categories.[]
 
 	[violet]ore[] [stat]Item[] ore, [stat]double[] outX, outY, [stat]bool[] outFound
 		Looks for an ore with an itemDrop of [coral]ore[].
@@ -298,5 +314,5 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 10830.
+This manual page was written for BE 11346.
 Newer versions may differ.

@@ -147,7 +147,7 @@ module.exports = page => {
 			// comments break without newlines
 			.replace(/\/\/.+\n^/g, "");
 		var ret;
-		eval("ret = (() => {" + (script.includes("return") ? script : "return " + script)+ "})()");
+		eval("ret = (() => {" + (script.includes("return") ? script : "return " + script) + "})()");
 
 		ret = ret == null ? "" : ret;
 

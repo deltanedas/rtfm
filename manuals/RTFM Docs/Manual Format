@@ -27,7 +27,7 @@ $("Example 1:")
 	$[red][]("Example 1:")
 Example 2:
 	$[red][](const arr = [1, 2, 3]; return "#" + arr.join("\t\n"))
-	$(const arr = [1, 2, 3]; return "#" + arr.join("\t\n"))
+	$(const arr = [1, 2, 3]; /* Stupid rhino bug */ const ret = "#" + arr.join("\t\n"); return ret)
 
 [stat]A challenge: try to make a manpage that infinitely parses itself.[]
 
