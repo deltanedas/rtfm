@@ -184,11 +184,15 @@ These instructions are used by almost every program.
 [royal]end[]
 	Shorthand for [royal]jump[] [coral]0 always[].
 
-[royal]jump[] [coral]int[] inst, [stat]Comp[] comp, [stat]Val[] a, b
-	Jumps to [coral]inst[] if [coral]a comp b[] is true.
+[royal]jump[] [coral]int[] addr, [stat]Comp[] comp, [stat]Val[] a, b
+	Jumps to [coral]addr[] if a condition is met.
 	Can be used on its own as an [stat]if[] statement, or with other instructions to form while, for, switch statements, or even functions.
-	The instruction index does not change in the graphical editor.
-	[royal]jump[] [coral]inst[] [violet]always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]inst[].
+	The address does not change in the graphical editor, it is tied to a statement.
+	[royal]jump[] [coral]addr[] [violet]always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]addr[].
+	[red]You cannot use a variable for addr, @counter must be used for variable jumps.[]
+
+	Control flow visualised with condition not met and met respectively:
+	{rtfm-jump}
 
 # Units
 These instructions work on the [stat]@unit[] register, rather than parameters like [royal]control[] would.
@@ -213,7 +217,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 [royal]ucontrol[]
 	Act on [stat]@unit[].
-	Subinstructions that take positions (besides [violet]move/[violet]approach[]) [red]will not move the unit[], you must do that yourself.
+	Subinstructions that take positions (besides [violet]move[]/[violet]approach[]) [red]will not move the unit[], you must do that yourself.
 	No-op for player-controlled units.
 
 	[violet]stop[]
