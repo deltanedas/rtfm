@@ -87,7 +87,7 @@ Some can be used directly sort of like a name, such as an Item, Liquid or Unit.
 [royal]double[] @time
 	Represents the current UNIX timestamp in milliseconds.
 
-[royal]int[] @mapx/@mapy
+[royal]int[] @mapw/@maph
 	Map's width and height respectively, in tiles.
 
 ## Variables
