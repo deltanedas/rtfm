@@ -2,7 +2,7 @@
 Firstly, create your UnitType and set its fields accordingly.
 	[green]const unit = extendContent(UnitType, "unit", {});[]
 Next, set its constructor to create one of the unit entities below:
-	[green]unit.constructor = () => extendContent(UnitEntity, unit, {});[]
+	[green]unit.constructor = () => extend(UnitEntity, {});[]
 Do whatever you like after that.
 Key source files are [stat]type/UnitType.java[] and [stat]entities/comp/UnitComp.java[]
 
@@ -15,7 +15,7 @@ const total = [];
 Vars.content.units().each(u => {
 	if (u && !u.mod) {
 		total.push(u.name + ": [stat]" + (u.constructor.get().class + "")
-			// Remove class mindustry.gen.<type>#id
+			/* Remove class mindustry.gen.<type>#id */
 			.replace(/^class mindustry\.gen\./, "")
 			.replace(/#\d+$/, "") + "[]");
 	}
