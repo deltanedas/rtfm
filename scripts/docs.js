@@ -29,7 +29,8 @@ rtfm.addSection("$rtfm.docs.title", [
 rtfm.addSection("$logic", [
 	"$logic.instructions",
 	"$logic.blocks",
-	"$logic.builtinvars"
+	"$logic.builtinvars",
+	"$logic.examples"
 ]);
 
 /* Documentation for some modding stuff */
