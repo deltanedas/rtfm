@@ -240,6 +240,24 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 	[violet]target[] [stat]double[] x, y, [stat]bool[] shoot
 		[royal]control[] [violet]shoot[] but for units.
+		[red]Will not shoot outside of the unit's range![]
+		To counter this, clamp a position to inside its range:
+			[purple]# Deconstruct the shoot position into a right-triangle relative to the unit[]
+			[royal]op[] [violet]sub[] [coral]dx[] [stat]shootX x[]
+			[royal]op[] [violet]sub[] [coral]dy[] [stat]shootY y[]
+			[royal]op[] [violet]atan2[] [coral]angle[] [stat]dx dy[]
+			[royal]op[] [violet]dst[] [coral]dist[] [stat]dx dy[]
+			[purple]# Clamp it within "range"[]
+			[royal]op[] [violet]min[] [coral]dist[] [stat]dist range[]
+			[purple]# Reconstruct the clamped shoot position[]
+			[royal]op[] [violet]sin[] [coral]dy[] [stat]angle[]
+			[royal]op[] [violet]cos[] [coral]dx[] [stat]angle[]
+			[royal]op[] [violet]mul[] [coral]dy[] [stat]dy dist[]
+			[royal]op[] [violet]mul[] [coral]dx[] [stat]dx dist[]
+			[royal]op[] [violet]add[] [coral]shootX[] [stat]x dx[]
+			[royal]op[] [violet]add[] [coral]shootY[] [stat]y dy[]
+			[purple]# Shoot to the clamped position[]
+			[royal]ucontrol[] [violet]target[] [stat]x y true[]
 
 	[violet]targetp[] [stat]Healthc[] target, [stat]bool[] shoot
 		[royal]control[] [violet]shootp[] but for units.
