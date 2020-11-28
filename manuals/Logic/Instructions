@@ -29,10 +29,12 @@ The following colours have special meaning:
 ## Basics
 Values may be passed directly or from a variable, unless specified otherwise.
 The following are equivalent:
-	[royal]set[] [stat]egg[] [coral]"egg yum yum"[]
+	[royal]set[] [coral]egg[] [stat]"egg yum yum"[]
 	[royal]print[] [stat]egg[]
 and
-	[royal]print[] [coral]"egg yum yum"[]
+	[royal]print[] [stat]"egg yum yum"[]
+
+Sub-instructions can never be passed from a variable.
 
 ## Writing
 
@@ -49,7 +51,7 @@ All in-world instructions that take coordinates and/or radii take their units in
 
 # Links
 Blocks linked to the processor can be gotten from
-[royal]getlink[] [royal]block[] [coral]0[]
+[royal]getlink[] [coral]block[] [stat]0[]
 or
 [royal]<blocksuffix>1[]
 Where the latter is like Lua, it is 1-indexed.
@@ -142,8 +144,8 @@ These instructions are used by almost every program.
 
 	[violet]configure[] [stat]Building[] build. [stat]Content[] config
 		Sets certain blocks' configuration to [coral]config[].
-		Only works with blocks that accept [stat]UnitType[], [stat]Item[] or [stat]Liquid[]s, such as sorters, unloaders, item/liquid, sources,
-		 unit factories, etc.
+		Only works with blocks that accept [stat]UnitType[], [stat]Item[] or [stat]Liquid[]s,
+		 such as sorters, unloaders, item/liquid sources, unit factories, etc.
 
 [royal]radar[] [stat]Building[] turret, [stat]TargetType[] prop1, prop2, prop3, [stat]bool[] order, [stat]Val[] output
 	Radar gets a list of units targetable by a [coral]turret[].
@@ -157,38 +159,38 @@ These instructions are used by almost every program.
 	The next target is put in [coral]output[].
 	The target can be a [stat]Unit[] or [stat]Building[], internally it is [stat]Healthc[].
 
-[royal]sensor[] [stat]Val[] store, [stat]Sensable[] sense, [stat]Building[] block
+[royal]sensor[] [stat]Val[] store, [stat]Building[] block, [stat]Sensable[] sense
 	Extract information [stat]sense[] from [stat]block[], saved to [stat]store[].
 	For example, to get the amount of graphite in a block:
-		[royal]sensor[] [stat]graphcount @graphite block[]
+		[royal]sensor[] [coral]graphcount[] [stat]block @graphite[]
 	Use the number in [stat]graphcount[] afterwards.
 
 [royal]set[] [stat]Val[] varname, [stat]Val[] value
 	Set a variable with name [stat]varname[] to [stat]value[].
-	For example, to copy [stat]@this[] into [stat]block[]:
-		[royal]set[] [stat]block @this[]
+	For example, to copy [stat]@this[] into [coral]block[]:
+		[royal]set[] [coral]block[] [stat]@this[]
 
 [royal]op[] [stat]Op[] op, [stat]Val[] result, [stat]double[] a, [[b]
 	Set [stat]result[] to the output of a mathematical operation.
 	If [coral]b[] is not set then it is ignored for a unary operation.
 	Some operations of note:
-		[royal]op[] [violet]rand[] [coral]num 10[]
+		[royal]op[] [violet]rand[] [coral]num[] [stat]10[]
 			Returns a random double between [0, 10).
 			To get rand(min, max), subtract the min from max to use with rand then add min to the result.
-		[royal]op[] [violet]floor[] [coral]num 1.9999[]
+		[royal]op[] [violet]floor[] [coral]num[] [stat]1.9999[]
 			Rounds a number [stat]down[] to a whole number, essentially num = num // 1.
 			To round a number to the [stat]nearest[], add 0.5 then floor.
 
 # Control flow
 
 [royal]end[]
-	Shorthand for [royal]jump[] [coral]0 always[].
+	Shorthand for [royal]jump[] [stat]0[] [violet]always[].
 
-[royal]jump[] [coral]int[] addr, [stat]Comp[] comp, [stat]Val[] a, b
+[royal]jump[] [stat]int[] addr, [stat]Comp[] comp, [stat]Val[] a, b
 	Jumps to [coral]addr[] if a condition is met.
 	Can be used on its own as an [stat]if[] statement, or with other instructions to form while, for, switch statements, or even functions.
 	The address does not change in the graphical editor, it is tied to a statement.
-	[royal]jump[] [coral]addr[] [violet]always[] is the jump equivalent to [royal]set[] [stat]@counter[] [coral]addr[].
+	[royal]jump[] [stat]addr[] [violet]always[] is the jump equivalent to [royal]set[] [coral]@counter[] [stst]addr[].
 	[red]You cannot use a variable for addr, @counter must be used for variable jumps.[]
 
 	Control flow visualised with condition not met and met respectively:
@@ -200,8 +202,8 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 [royal]ubind[]
 	[stat]UnitType[] type
-		Loads the next cached unit of a certain [coral]type[] into [stat]@unit[].
-		It will loop over them round-robin style.
+		Loads the next cached unit of a certain [stat]type[] into [coral]@unit[].
+		It will loop over them round-robin style, it will loop over once it reaches the last unit.
 		Other unit instructions use the unit in [stat]@unit[].
 		Won't work across teams.
 		[coral]Has no range limit.[]
@@ -266,7 +268,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 		Drops at most [coral]amount[] items into a building.
 
 	[violet]itemTake[] [stat]Building[] from, [stat]Item[] item, [stat]int[] amount
-		Takes at most [coral]amount[] of an item from a building.
+		Takes at most [coral]amount[] of an [coral]item[] from a building.
 
 	[violet]payDrop[]
 		Drops the current payload, if there's room (for blocks).
@@ -281,7 +283,7 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 
 	[violet]flag[] [stat]double[] flag
 		Sets the unit's flag to a number.
-		Read it back with [royal]sensor[] [stat]flagVar @unit @flag[].
+		Read it back with [royal]sensor[] [coral]flagVar[] [stat]@unit @flag[].
 		Use to identify certain units.
 		Seen as the number next to the gear when hovering over a unit.
 
@@ -336,5 +338,5 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 	Graphically represented by the [stat]Invalid[] block.
 
 # Version
-This manual page was written for BE 11346.
+This manual page was written for BE 20111.
 Newer versions may differ.
