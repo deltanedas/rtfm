@@ -45,6 +45,8 @@ try {
 
 	// Still here? Check out RTFM Docs / API or scripts/library.js and get your hands real dirty.
 } catch (e) {
-	// Message here
-	Log.warn("Please install [#00aaff]DeltaNedas/rtfm[] to view OP Walls's manual pages.");
+	if (!Vars.headless) {
+		// Message here
+		Log.warn("Please install [#00aaff]DeltaNedas/rtfm[] to view OP Walls's manual pages.");
+	}
 }
