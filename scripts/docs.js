@@ -37,3 +37,6 @@ rtfm.addSection("$logic", [
 rtfm.addSection("Modding", [
 	"Units"
 ]);
+
+// If you need to add docs to a section RTFM added, it's here for convenience
+module.exports = rtfm;
