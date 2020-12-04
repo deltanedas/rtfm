@@ -29,7 +29,7 @@ try {
 	Log.warn("Install [#00aaff]DeltaNedas/ui-lib[] for extra manual buttons.");
 }
 
-/* Add a button for the logic manual inside the processor dislog */
+/* Add a button for the logic manual inside the processor dialog */
 
 Events.on(ClientLoadEvent, () => {
 	Vars.ui.logic.buttons.button(Icon.book, () => {
