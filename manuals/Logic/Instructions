@@ -27,6 +27,9 @@ The following colours have special meaning:
 		In instruction definitions, not examples, it signifies a param type.
 
 ## Basics
+In mindustry logic, instructions are executed from top to bottom, wrapping around at the end.
+The first address (line) is 0, the largest is 999.
+
 Values may be passed directly or from a variable, unless specified otherwise.
 The following are equivalent:
 	[royal]set[] [coral]egg[] [stat]"egg yum yum"[]
@@ -36,15 +39,15 @@ and
 
 Sub-instructions can never be passed from a variable.
 
-## Writing
+# Writing
 
 Mindustry logic can be written in a text editor like assembly, or graphically in a logic block.
 
 Examples of both:
-[royal]draw[] [violet]clear[] [coral]0 0 0 0 0 0[]
+[royal]draw[] [violet]clear[] [stat]0 0 0 0 0 0[]
 [royal]drawflush[] [stat]display1[]
 {rtfm-instruction-example}
-(In this case the draw instruction has 6 values, [coral]clear[] only uses 3 so only 3 are shown)
+(In this case the draw instruction has 6 values, [violet]clear[] only uses 3 so only 3 are shown)
 
 # Measurements
 All in-world instructions that take coordinates and/or radii take their units in [stat]tiles[].

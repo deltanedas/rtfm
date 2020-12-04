@@ -1,4 +1,4 @@
-## Snippets
+## Examples
 Short bits of code that do commonly used things.
 These colours will be used in code examples:
 	[royal][[royal][]: instructions
@@ -49,3 +49,29 @@ If we want to use a switch as a button to perform a one-time action, it must be 
 	[royal]control[] [violet]enabled[] [stat]switch1 false[]
 	[purple]# Now do whatever you want, here we disable the processor for a few seconds[]
 	[royal]control[] [violet]enabled[] [stat]@this false[]
+
+# Waiting
+This program will toggle a switch every 5 seconds (5000 milliseconds)
+It uses a blocking wait, this should not be used with units.
+	[purple]# Toggle the switch[]
+	[royal]op[] [violet]notEqual[] [coral]toggle[] [stat]toggle false[]
+	[royal]control[] [violet]enabled[] [stat]switch1 toggle[]
+
+	[purple]# Set our sleep end time - 5 seconds from now[]
+	[royal]op[] [violet]add[] [coral]delay[] [stat]@time 5000[]
+	[purple]# Wait until the time has elapsed
+	# (this code can only be imported, otherwise a previous instruction must be picked)[]
+	[royal]jump[] [stat]3[] [violet]lessThan[] [stat]@time delay[]
+
+# Non-blocking waiting
+This will wait until a unit is at a position before doing something.
+The previous example would wait for a unit to move [red]before binding the next[], this acts on all units at once.
+	[purple]# This is ran for every unit[]
+	[royal]ubind[] [stat]@flare[]
+	[royal]ucontrol[] [violet]move[] [stat]@thisx @thisy[]
+	[royal]ucontrol[] [violet]within[] [stat]@thisx @thisy 5[] [coral]within[]
+	[purple]# Try another unit if the condition is false[]
+	[royal]jump[] [stat]0[] [violet]equal[] [stat]within false[]
+
+	[purple]# This is only ran for units within the position[]
+	[royal]ucontrol[] [violet]targetp[] [stat]@this true[]
