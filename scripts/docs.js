@@ -15,7 +15,7 @@
 	along with this program.	If not, see <https://www.gnu.org/licenses/>.
 */
 
-const rtfm = this.global.rtfm;
+const rtfm = require("rtfm/library");
 
 /* Documentation for the library */
 rtfm.addSection("$rtfm.docs.title", [
