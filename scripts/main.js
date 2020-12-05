@@ -40,7 +40,7 @@ const setup = () => {
 					// Save current scroll when closing rtfm
 				} else {
 					this.buttons.button("$back", Icon.left, () => {
-						page.scroll = this.pagePane.scrollY;
+						page.scroll = this.pagePane.scrollPercentY;
 
 						this.view(page.section, false);
 					});
@@ -49,13 +49,9 @@ const setup = () => {
 
 			// Add on the default close button
 			if (temporary || page == rtfm) {
-try {
 				this.buttons.cells.peek().get().clicked(() => {
 					page.scroll = this.pagePane.scrollY;
 				});
-} catch (e) {
-	Log.warn("uh oh it die: " + e + " / " + e.fileName + ":" + e.lineNumber);
-}
 			}
 
 			this.cont.clear();
@@ -134,10 +130,11 @@ try {
 		initScroll(pane, page) {
 			this.pagePane = pane;
 
-			// Load last position
-			pane.scrollYForce = page.scroll;
 			Core.app.post(() => {
-				Core.scene.setScrollFocus(pane);
+				// Load last position
+				pane.scrollYForce = page.scroll;
+				pane.updateVisualScroll();
+				Core.scene.scrollFocus = pane;
 			});
 		}
 	});

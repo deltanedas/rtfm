@@ -16,7 +16,7 @@
 */
 
 /* Build a page's dialog from page.content, a small markup language.
-   This is the new builder that runs vhar by char, is much faster and produces
+   This is the new builder that runs char by char, is much faster and produces
    a much slimmer page. */
 
 // TODO: use a stack for content indices stuff, rewrite logic?
@@ -29,7 +29,7 @@ var startLine, startImage, scriptStart, brackets, textStart, heading, headingSta
 
 const getSize = Pattern.compile("^([\\w-]+)\\s*:\\s*(\\d+)$");
 
-const addHeading = (table, line) => {
+function addHeading(table, line) {
 	line = line.replace(/^\s*/, "");
 
 	table.row();
@@ -44,10 +44,10 @@ const addHeading = (table, line) => {
 	table.image().color(Pal.stat).size(textwidth, 2 + 2 * heading)
 		.center().padBottom(16);
 	table.row();
-};
+}
 
 /* Add image in the format {texture[:size]} */
-const addImage = (table, str) => {
+function addImage(table, str) {
 	const matched = getSize.matcher(str);
 	const found = matched.find();
 
@@ -70,9 +70,9 @@ const addImage = (table, str) => {
 	} else {
 		img.left();
 	}
-};
+}
 
-Core.app.post(() => {
+/*Core.app.post(() => {
 	this.global.rtfm.addPage("test", [
 		"Line 1",
 		"# Line 2",
@@ -87,14 +87,13 @@ Core.app.post(() => {
 		"$('# bad trailing heading')",
 		"$(table.add('gnu'); return null)"
 	]);
-});
+});*/
 
 module.exports = page => {
 	Time.mark()
 	var i;
 	const table = page.table;
 	table.defaults().left();
-	table.row();
 
 	if (Array.isArray(page.content)) {
 		page.content = page.content.join("\n");
@@ -111,7 +110,7 @@ module.exports = page => {
 	headingStart = null;
 	centered = false;
 
-	var textfunc = cell => {
+	function textfunc(cell) {
 		cell.growX().wrap();
 		if (centered) {
 			cell.center();
@@ -119,9 +118,9 @@ module.exports = page => {
 		} else {
 			cell.left();
 		}
-	};
+	}
 
-	const endString = i => {
+	function endString(i) {
 		const text = page.content.slice(textStart, i);
 		if (text.charAt(0) == '\n') table.row();
 		textfunc(table.add(text));
@@ -131,16 +130,16 @@ module.exports = page => {
 		}
 		centered = false;
 		textStart = i + 1;
-	};
+	}
 
-	const endHeading = i => {
+	function endHeading(i) {
 		addHeading(table, page.content.slice(headingStart, i));
 		heading = 0;
 		headingStart = null;
 		textStart = i + 1;
-	};
+	}
 
-	const endScript = () => {
+	function endScript() {
 		const script = page.content.slice(scriptStart, i)
 			// return breaks with newlines
 			.replace(/\n/g, " ")
@@ -156,9 +155,9 @@ module.exports = page => {
 		i -= script.length + 3;
 
 		scriptStart = null;
-	};
+	}
 
-	const flush = i => {
+	function flush(i) {
 		if (textStart != null && i > textStart) {
 			if (heading) {
 				endHeading(i);
@@ -167,7 +166,7 @@ module.exports = page => {
 			}
 			textStart = null;
 		}
-	};
+	}
 
 	for (i = 0; i < page.content.length; i++) {
 		var char = page.content[i];
@@ -192,8 +191,9 @@ module.exports = page => {
 			if (centered) {
 				endString(i);
 				table.row();
+			} else if (heading) {
+				endHeading(i);
 			}
-			if (heading) endHeading(i);
 
 			startImage = null;
 			startLine = true;
@@ -214,6 +214,7 @@ module.exports = page => {
 				startLine = true;
 			} else if (char == '~' && heading == 0) {
 				flush(i);
+				table.row();
 				centered = true;
 				textStart = i + 1;
 			}
