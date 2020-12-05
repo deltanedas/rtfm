@@ -122,6 +122,8 @@ module.exports = page => {
 
 	function endString(i) {
 		const text = page.content.slice(textStart, i);
+		if (!text) return;
+
 		if (text.charAt(0) == '\n') table.row();
 		textfunc(table.add(text));
 		// Don't mess up images
@@ -191,6 +193,7 @@ module.exports = page => {
 			if (centered) {
 				endString(i);
 				table.row();
+				centered = false;
 			} else if (heading) {
 				endHeading(i);
 			}
