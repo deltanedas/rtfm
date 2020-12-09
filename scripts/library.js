@@ -206,4 +206,4 @@ const rtfm = {
 };
 
 module.exports = rtfm;
-this.global.rtfm = rtfm;
+global.rtfm = rtfm;

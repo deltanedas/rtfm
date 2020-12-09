@@ -17,7 +17,7 @@
 
 /* Add buttons with DeltaNedas/ui-lib */
 
-const rtfm = this.global.rtfm;
+const rtfm = global.rtfm;
 
 try {
 	const ui = require("ui-lib/library");

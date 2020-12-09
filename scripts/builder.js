@@ -73,7 +73,7 @@ function addImage(table, str) {
 }
 
 /*Core.app.post(() => {
-	this.global.rtfm.addPage("test", [
+	global.rtfm.addPage("test", [
 		"Line 1",
 		"# Line 2",
 		"## Line 3",

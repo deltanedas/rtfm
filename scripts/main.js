@@ -20,7 +20,7 @@ require("rtfm/docs");
 require("rtfm/button");
 
 const setup = () => {
-	const dialog = extendContent(BaseDialog, "$rtfm.manual-pages", {
+	const dialog = extend(BaseDialog, "$rtfm.manual-pages", {
 		view(page, temporary) {
 			this.buttons.clearChildren();
 
