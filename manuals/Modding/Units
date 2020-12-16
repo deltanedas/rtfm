@@ -1,0 +1,24 @@
+# How to make a unit
+Firstly, create your UnitType and set its fields accordingly.
+	[green]const unit = extendContent(UnitType, "unit", {});[]
+Next, set its constructor to create one of the unit entities below:
+	[green]unit.constructor = () => extend(UnitEntity, {});[]
+Do whatever you like after that.
+Key source files are [stat]type/UnitType.java[] and [stat]entities/comp/UnitComp.java[]
+
+# Unit entity types
+Entity types are combined from components in [stat]entities/comp/*Comp.java[].
+
+These are the vanilla units and their entity types, use them in UnitType#constructor
+$(
+const total = [];
+Vars.content.units().each(u => {
+	if (u && !u.mod) {
+		total.push(u.name + ": [stat]" + (u.constructor.get().class + "")
+			/* Remove class mindustry.gen.<type>#id */
+			.replace(/^class mindustry\.gen\./, "")
+			.replace(/#\d+$/, "") + "[]");
+	}
+});
+return "- " + total.join("\n- ");
+)

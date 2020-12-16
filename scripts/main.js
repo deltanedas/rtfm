@@ -8,34 +8,50 @@
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+	along with this program.	If not, see <https://www.gnu.org/licenses/>.
 */
-
-(() => {
 
 const rtfm = require("rtfm/library");
 require("rtfm/docs");
 require("rtfm/button");
 
 const setup = () => {
-	const dialog = extendContent(FloatingDialog, "$rtfm.manual-pages", {
-		view(page) {
-			rtfm.currentPage = page;
-
+	const dialog = extend(BaseDialog, "$rtfm.manual-pages", {
+		view(page, temporary) {
 			this.buttons.clearChildren();
 
 			if (page == rtfm) {
 				this.title.text = Core.bundle.get("rtfm.manual-pages");
-				this.addCloseButton();
 			} else {
 				this.title.text = page.title(page);
-				this.buttons.addImageTextButton("$back", Icon.left, run(() => {
-					this.view(page.section);
-				}));
+			}
+
+			if (temporary) {
+				this.addCloseButton();
+			} else {
+				rtfm.currentPage = page;
+
+				if (page == rtfm) {
+					this.addCloseButton();
+					// Save current scroll when closing rtfm
+				} else {
+					this.buttons.button("$back", Icon.left, () => {
+						page.scroll = this.pagePane.scrollPercentY;
+
+						this.view(page.section, false);
+					});
+				}
+			}
+
+			// Add on the default close button
+			if (temporary || page == rtfm) {
+				this.buttons.cells.peek().get().clicked(() => {
+					page.scroll = this.pagePane.scrollY;
+				});
 			}
 
 			this.cont.clear();
@@ -53,16 +69,15 @@ const setup = () => {
 
 			t.table(cons(search => {
 				search.left();
-				search.addImage(Icon.zoom);
-				search.addField("", cons(text => {
+				search.image(Icon.zoom);
+				search.field("", text => {
 					rebuild(text.toLowerCase());
-				})).growX();
-			})).fillX().padBottom(4);
+				}).growX();
+			})).width(400).fillX().padBottom(4);
 			t.row();
 
-			t.pane(cons(pages => {
+			const pane = t.pane(pages => {
 				rebuild = query => {
-try{
 					pages.clear();
 
 					/* ls --group-directories-first */
@@ -89,16 +104,15 @@ try{
 
 					func(sectionnames.sort());
 					func(pagenames.sort());
-}catch(e){print(e)}
 				};
 				rebuild();
-			})).top().margin(20).padBottom(8);
+			}).width(400).growY().top().margin(20).padBottom(8).get();
+
+			this.initScroll(pane, section);
 		},
 
 		/* Show the manual page */
 		rebuild(page) {
-try{
-print("rebuild page " + page.title(page))
 			if (!page.table) {
 				page.table = new Table();
 				try {
@@ -110,32 +124,40 @@ print("rebuild page " + page.title(page))
 
 			const pane = new ScrollPane(page.table);
 			this.cont.add(pane).grow();
-			Core.app.post(run(() => Core.scene.setScrollFocus(pane)));
-}catch(e){print(e)}
+			this.initScroll(pane, page);
+		},
+
+		initScroll(pane, page) {
+			this.pagePane = pane;
+
+			Core.app.post(() => {
+				// Load last position
+				pane.scrollYForce = page.scroll;
+				pane.updateVisualScroll();
+				Core.scene.scrollFocus = pane;
+			});
 		}
 	});
 
 	rtfm.dialog = dialog;
-	dialog.view(rtfm);
+	dialog.view(rtfm, false);
 };
 
-Events.on(EventType.ClientLoadEvent, run(setup));
+Events.on(ClientLoadEvent, setup);
 
 const addButton = () => {
 	// AboutDialog clears after 1 tick, so this waits 2
-	Vars.ui.about.shown(run(() => Time.run(2, run(() => {
-		Vars.ui.about.buttons.addButton("$rtfm.manuals", rtfm.showManual)
+	const override = () => Time.run(2, () => {
+		Vars.ui.about.buttons.button("$rtfm.manuals", rtfm.showManual)
 			.size(200, 64).name("manuals");
-	}))));
+	});
+
+	Vars.ui.about.shown(override);
+	Events.on(ResizeEvent, override);
 };
 
 if (Vars.ui.about) {
-	/* Not loaded on game start, check for old button */
-	if (!Vars.ui.about.cells.find(boolf(cell => cell.get().name == "manuals"))) {
-		addButton();
-	}
+	addButton();
 } else {
-	Events.on(EventType.ClientLoadEvent, run(addButton));
+	Events.on(ClientLoadEvent, addButton);
 }
-
-})();

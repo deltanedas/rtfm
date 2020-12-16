@@ -8,19 +8,16 @@
 
 	This program is distributed in the hope that it will be useful,
 	but WITHOUT ANY WARRANTY; without even the implied warranty of
-	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 	GNU General Public License for more details.
 
 	You should have received a copy of the GNU General Public License
-	along with this program.  If not, see <https://www.gnu.org/licenses/>.
+	along with this program.	If not, see <https://www.gnu.org/licenses/>.
 */
-
-/* Documentation for the library */
-
-(() => {
 
 const rtfm = require("rtfm/library");
 
+<<<<<<< HEAD
 rtfm.addSection("$rtfm.docs.title", {
 	"$rtfm.docs.getting-started": [
 		"# Setup",
@@ -126,3 +123,28 @@ rtfm.addSection("$rtfm.docs.title", {
 });
 
 })();
+=======
+/* Documentation for the library */
+rtfm.addSection("$rtfm.docs.title", [
+	"$rtfm.docs.getting-started",
+	"$rtfm.docs.api",
+	"$rtfm.docs.format",
+	"$rtfm.docs.colours"
+]);
+
+/* Documentation for 6.0 stuff */
+rtfm.addSection("$logic", [
+	"$logic.instructions",
+	"$logic.blocks",
+	"$logic.builtinvars",
+	"$logic.examples"
+]);
+
+/* Documentation for some modding stuff */
+rtfm.addSection("Modding", [
+	"Units"
+]);
+
+// If you need to add docs to a section RTFM added, it's here for convenience
+module.exports = rtfm;
+>>>>>>> origin/6.0

@@ -1,0 +1,77 @@
+## Examples
+Short bits of code that do commonly used things.
+These colours will be used in code examples:
+	[royal][[royal][]: instructions
+	[violet][[violet][]: sub-instructions
+	[purple][[purple][]: comments
+	[stat][[stat][]: variables read by the instruction
+	[coral][[coral][]: variables written by the instruction
+
+# Iterating over links
+Here a while-loop is used to iterate over every linked block.
+You can use this e.g. to make all linked turrets shoot a single target.
+
+	[purple]# Start with the first block[]
+	[royal]set[] [coral]i[] [stat]0[]
+		[purple]# This is the loop body[]
+		[royal]getlink [coral]block[] [stat]i[]
+		[purple]# Do something with "block" now[]
+		[royal]control[] [violet]enabled[] [stat]block 0[]
+
+	[royal]op[] [violet]add[] [coral]i[] [stat]i 1[]
+	[purple]# Keep going until there are no more links[]
+	[royal]jump[] [stat]1[] [violet]lessThan[] [stat]i @links[]
+
+# Using flagged units
+In this example, we only want to control flares that have the flag [royal]50[].
+Flares must be flagged by another program until this one will control them.
+This is essential on multiplayer as to not have programs fighting for control of the same units.
+
+	[purple]# Select a flare[]
+	[royal]ubind[] [stat]@flare[]
+	[purple]# Get its flag[]
+	[royal]sensor[] [coral]flag[] [stat]@unit @flag[]
+	[purple]# If it's wrong, look for another flare[]
+	[royal]jump[] [stat]0[] [violet]notEqual[] [stat]flag 50[]
+
+	[purple]# Now we can control the flagged unit, move it to this processor[]
+	[royal]ucontrol[] [violet]approach[] [stat]@thisx @thisy 5[]
+
+# Using a switch as a button
+If we want to use a switch as a button to perform a one-time action, it must be disabled after it's pressed.
+
+	[purple]# Check if it's pressed[]
+	[royal]sensor[] [coral]pressed[] [stat]switch1 @enabled[]
+	[purple]# Wait until it is[]
+	[royal]jump[] [stat]0[] [violet]equal[] [stat]pressed false[]
+
+	[purple]# Switch is pressed, release it[]
+	[royal]control[] [violet]enabled[] [stat]switch1 false[]
+	[purple]# Now do whatever you want, here we disable the processor for a few seconds[]
+	[royal]control[] [violet]enabled[] [stat]@this false[]
+
+# Waiting
+This program will toggle a switch every 5 seconds (5000 milliseconds)
+It uses a blocking wait, this should not be used with units.
+	[purple]# Toggle the switch[]
+	[royal]op[] [violet]notEqual[] [coral]toggle[] [stat]toggle false[]
+	[royal]control[] [violet]enabled[] [stat]switch1 toggle[]
+
+	[purple]# Set our sleep end time - 5 seconds from now[]
+	[royal]op[] [violet]add[] [coral]delay[] [stat]@time 5000[]
+	[purple]# Wait until the time has elapsed
+	# (this code can only be imported, otherwise a previous instruction must be picked)[]
+	[royal]jump[] [stat]3[] [violet]lessThan[] [stat]@time delay[]
+
+# Non-blocking waiting
+This will wait until a unit is at a position before doing something.
+The previous example would wait for a unit to move [red]before binding the next[], this acts on all units at once.
+	[purple]# This is ran for every unit[]
+	[royal]ubind[] [stat]@flare[]
+	[royal]ucontrol[] [violet]move[] [stat]@thisx @thisy[]
+	[royal]ucontrol[] [violet]within[] [stat]@thisx @thisy 5[] [coral]within[]
+	[purple]# Try another unit if the condition is false[]
+	[royal]jump[] [stat]0[] [violet]equal[] [stat]within false[]
+
+	[purple]# This is only ran for units within the position[]
+	[royal]ucontrol[] [violet]targetp[] [stat]@this true[]
