@@ -135,7 +135,10 @@ These instructions are used by almost every program.
 [royal]control[]
 	[violet]enabled[] [stat]Building[] target, [stat]bool[] enabled
 		Enable a block like a conveyor, switch, door, etc.
-		Doesn't work for things like walls, cores, etc.
+		Doesn't work for:
+			- Lunchpads
+			- Power nodes [stat](Use diodes instead)[]
+			- [stat]@this[] since technically it isn't linked.
 
 	[violet]shoot[] [stat]Building[] turret, [stat]double[] x, y, [stat]bool[] shoot
 		Tell the turret to fire at an absolute position.
@@ -144,6 +147,7 @@ These instructions are used by almost every program.
 	[violet]shootp[] [stat]Building[] turret, [stat]Healthc[] target, [stat]bool[] shoot
 		Smart version of [violet]shoot[], gets the predicted position of a block or unit.
 		Takes speed and position into account, giving a decent guess as to where the target will be.
+		A typical idiom is [violet]shootp[] [stat]turret target target[], to shoot at a target if it exists.
 
 	[violet]configure[] [stat]Building[] build. [stat]Content[] config
 		Sets certain blocks' configuration to [coral]config[].
