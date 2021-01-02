@@ -140,7 +140,7 @@ These instructions are used by almost every program.
 			- Power nodes [stat](Use diodes instead)[]
 			- [stat]@this[] since technically it isn't linked.
 
-    Also note that buildings which do not get disabled regularly will automatically re-enable themselves after a while.
+		[coral]Also note that buildings which do not get disabled regularly will automatically re-enable themselves after a while.[]
 
 	[violet]shoot[] [stat]Building[] turret, [stat]double[] x, y, [stat]bool[] shoot
 		Tell the turret to fire at an absolute position.
