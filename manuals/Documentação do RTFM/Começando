@@ -1,0 +1,44 @@
+~{rtfm:150}
+
+# Setup
+Get [coral]sample.js[] from your RTFM zip/folder or from GitHub at
+	[stat]https://github.com/DeltaNedas/rtfm/raw/6.0/sample.js[]
+Modify it to suit your needs, read the comments
+
+# Adding pages
+Use [green]rtfm.addPage("cool manpage")[] to add a page.
+This loads the text from [green]manuals/cool manpage[] in your mod.
+Multiple pages can be added at once with [stat]rtfm.addPages[].
+Manual pages use a format documented in the [red]Format[] page.
+
+# Sections
+Sections are like pages but instead of containing a page's content, they show other pages.
+Use [green]rtfm.addSection("OP Walls", [["Router Wall"])[] to add a section.
+Sub-sections can be added with an [stat]object[] of [green]{"Section Name": [["Subpages"]}[] instead of a page name.
+To add a page and subsection, set the page's value to null:
+		[green]{
+		"Section name": [["Pages..."],
+		"Normal page": null
+	}[]
+
+# Translation
+Manual pages can be translated with bundles.
+Use [green]$[] at the start of a name to do so.
+RTFM will try to find Translated -> English -> Untranslated ([green]$bundlekey[])
+
+[green]rtfm.addPage("$translated")[] -> Translato -> Translated -> $translated
+[green]rtfm.addSection("$anuke", [["$cat"])[] -> Anuko/Cato -> Anuke/Cat -> $anuke/$cat
+
+Translated pages are referred to in code with the bundle key.
+[green]rtfm.pages[["$anuke"][], not [red]rtfm.pages.Anuke[]
+
+You can translate sections in two ways:
+- In The folder only:
+	Section Name/English
+	Section Name/Español
+
+- By keeping translations in their own folders:
+	Section Name/English
+	<Insert poor spanish>/Español
+
+Use whichever you like, the latter is prefered as it is cleaner with more translations.
