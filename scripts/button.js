@@ -33,6 +33,6 @@ try {
 
 Events.on(ClientLoadEvent, () => {
 	Vars.ui.logic.buttons.button(Icon.book, () => {
-		rtfm.showPage("$logic/$logic.instructions");
+		rtfm.showPage("$logic/$logic.instructions", true);
 	}).size(64);
 });

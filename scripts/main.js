@@ -32,6 +32,11 @@ const setup = () => {
 
 			if (temporary) {
 				this.addCloseButton();
+				this.buttons.cells.peek().get().clicked(() => {
+					// go back to previous manually-opened page
+					this.view(rtfm.currentPage, false);
+					this.hide();
+				});
 			} else {
 				rtfm.currentPage = page;
 
