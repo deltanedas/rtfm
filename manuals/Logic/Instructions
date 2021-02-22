@@ -35,7 +35,7 @@ The following are equivalent:
 	[royal]set[] [coral]egg[] [stat]"egg yum yum"[]
 	[royal]print[] [stat]egg[]
 and
-	[royal]print[] [stat]"egg yum yum"[]
+	[royal]printflush[] [stat]"egg yum yum"[]
 
 Sub-instructions can never be passed from a variable.
 
