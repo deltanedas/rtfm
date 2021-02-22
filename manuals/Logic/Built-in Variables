@@ -31,6 +31,7 @@ Primitives are the most basic of values in the language.
 	Example code to iterate over them (run through them) all:
 		[stat]set[] [royal]i[] [coral]0[]
 		[stat]getlink[] [royal]block i[]
+		[stat]op[] [royal]add[] [coral]i[] [stat]i 1[]
 		[stat]jump[] [coral]1 lessThan[] [royal]i @links[]
 
 [royal]Building[] [pink]suffix<n>[]
