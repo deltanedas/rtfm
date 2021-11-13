@@ -231,6 +231,9 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 	Subinstructions that take positions (besides [violet]move[]/[violet]approach[]) [red]will not move the unit[], you must do that yourself.
 	No-op for player-controlled units.
 
+	[violet]idle[]
+		Don't move but keep building/mining. The default state.
+
 	[violet]stop[]
 		Stop all actions, including shooting.
 		To stop and stay shooting, move to the current position with [royal]sensor[]'d @x and @y.
