@@ -92,14 +92,14 @@ These instructions are for memory cells, displays and message blocks respectivel
 	[violet]rect[] [stat]int[] x, y, w, h
 		Draw a rectangle with bottom left corner [stat]x, y[] and top right corner [stat]x + w, y + h[].
 
-	[violet]rectLine[] [stat]int[] x, y, w, h
+	[violet]lineRect[] [stat]int[] x, y, w, h
 		Like [violet]rect[] but with lines.
 
 	[violet]poly[] [stat]int[] x, y, sides, [stat]double[] radius, rotation
 		Draw an equilateral polygon centered on a point.
 		A circle may be drawn with many sides.
 
-	[violet]polyLine[] [stat]int[] x, y, sides, [stat] double[] radius, position
+	[violet]linePoly[] [stat]int[] x, y, sides, [stat] double[] radius, position
 		Like [violet]poly[] but with lines.
 
 	[violet]triangle[] [stat]int[] x1, y1, x2, y2, x3, y3
