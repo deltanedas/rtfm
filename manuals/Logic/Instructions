@@ -323,9 +323,10 @@ This is mainly to prevent controlling enemy units found from [royal]radar[].
 		Since the bound [stat]@unit[] is within the circle, [coral]result[] is set to true.
 		{rtfm-ucontrol-within}
 
-[royal]uradar[] [stat]Target[] a, b, c, [stat]bool[] order, [stat]Sort[] sort, [stat]Healthc[] result
+[royal]uradar[] [stat]Target[] a, b, c, [stat]SortType[] sort, [stat]bool[] 0, [stat]bool[] order, [stat]Healthc[] result
 	Like [royal]radar[], but on all units in the unit register.
 	Searches until a suitable target is found.
+	0 is only part of the text instruction and not included graphically in the logic block. It has no meaning.
 
 [royal]ulocate[]
 	Uses units to find a block type.
