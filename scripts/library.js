@@ -17,6 +17,13 @@
 
 const translate = str => str[0] == '$' ? Core.bundle.get(str.substr(1)) : str;
 
+// like old base.js readString
+const currentMod = Reflect.get(Scripts, "currentMod");
+const readString = path => {
+	const file = currentMod.root.child(path);
+	return file.readString();
+};
+
 const readTranslated = path => {
 	const parts = path.split('/');
 	for (var i in parts) {
