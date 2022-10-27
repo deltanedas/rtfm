@@ -26,8 +26,8 @@ They can be escaped with colours like with images.
 $("Example 1:")
 	$[red][]("Example 1:")
 Example 2:
-	$[red][](const arr = [1, 2, 3]; return "#" + arr.join("\t\n"))
-	$(const arr = [1, 2, 3]; /* Stupid rhino bug */ const ret = "#" + arr.join("\t\n"); return ret)
+	$[red][](const arr = [1, 2, 3]; return arr.join("\n\t"))
+	$(const arr = [1, 2, 3]; return arr.join("\n\t"))
 
 [stat]A challenge: try to make a manpage that infinitely parses itself.[]
 
