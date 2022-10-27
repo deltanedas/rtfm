@@ -8,9 +8,9 @@ Allows mods to add manual pages to the About menu.
 
 ## All manuals
 
-Click the Manuals button in **About**. (in the main menu)
+Click the Manuals button in **Database** -> **About**. (in the main menu)
 
-Alternatively, install **DeltaNedas/ui-lib** and click Manuals in **More** or in-game.
+Alternatively, install **deltanedas/ui-lib** and click Manuals in **More** or in-game.
 
 ## Logic Manual
 
