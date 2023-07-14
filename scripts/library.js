@@ -34,6 +34,8 @@ const readTranslated = path => {
 		// Blocks/Router in language of choice, fallback to english
 		return readString(parts.join("/"));
 	} catch (e) {
+		Log.err("Failed to read " + parts.join("/"));
+		Log.err(e);
 		// $blocks/$block.router.name as a fallback for older mods
 		return readString(path);
 	}
